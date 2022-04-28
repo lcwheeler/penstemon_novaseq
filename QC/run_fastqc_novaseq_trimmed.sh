@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #SBATCH -N 1
-#SBATCH -n 10
+#SBATCH -n 20
 #SBATCH -p wessinger-48core
 #SBATCH --job-name=fastqc_trimmed
 
