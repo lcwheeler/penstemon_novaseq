@@ -21,6 +21,6 @@ do
     r2in="${r1in/R1_001.fastq.gz/R2_001.fastq.gz}"
     r1out="${r1in##*/}"
     r2out="${r1out/R1_001.fastq.gz/R2_001.fastq.gz}"
-    $fastpdir/./fastp -i "$r1in" -I "$r2in" -m --merged_out "${r1out/merged_L001_R1_001.fastq.gz/trimmed.fastq.gz}" --include_unmerged -x -c -w 16 -h "${r1out/merged_L001_R1_001.fastq.gz/html}" -j "${r1out/merged_L001_R1_001.fastq.gz/json}"
+    $fastpdir/./fastp -i "$r1in" -I "$r2in" --out1 "${r1out/merged_L001_R1_001.fastq.gz/trimmed_L001_R1_001.fastq.gz}" --out2 "${r1out/merged_L001_R1_001.fastq.gz/trimmed_L001_R2_001.fastq.gz}" --unpaired1 "${r1out/merged_L001_R1_001.fastq.gz/unpaired_L001_R1_001.fastq.gz}" --unpaired2 "${r1out/merged_L001_R1_001.fastq.gz/unpaired_L001_R2_001.fastq.gz}" -x -c -w 16 -h "${r1out/merged_L001_R1_001.fastq.gz/html}" -j "${r1out/merged_L001_R1_001.fastq.gz/json}"
 done
 
