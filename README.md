@@ -43,7 +43,7 @@ done;
 * Default options for quality filtering
 * Base correction for overlapping reads enabled
 * poly-x trimming on 3' ends enabled
-* Output merged, and unmerged reads that pass filter are included (reads failing to pass filter are not included)
+* Unmerged reads that pass filter are included in separate files (default is to delete. reads failing to pass filter are not included)
 * See [`run_fastp_novaseq.sh`](https://github.com/benstemon/dasanthera_novaseq/blob/main/QC/run_fastp_novaseq.sh)
 
 ```shell
