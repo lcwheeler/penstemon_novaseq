@@ -76,3 +76,38 @@ done
 
 This produces trimmed reads, that have been paired (in *trimmed*.fastq.gz) and unpaired (in *unpaired*.fastq.gz).
 Moving forward with mapping, these unpaired reads can be mapped in the same way as paired reads, and then downstream BAMs can be merged with Picard's MergeSamFiles (or some other approach)
+
+#### 4. fastqc on trimmed reads
+* see [`run_fastqc_novaseq_trimmed.sh`](https://github.com/benstemon/dasanthera_novaseq/blob/main/QC/run_fastqc_novaseq_trimmed.sh)
+
+```shell
+#!/bin/sh
+
+#SBATCH -N 1
+#SBATCH -n 20
+#SBATCH -p wessinger-48core
+#SBATCH --job-name=fastqc_trimmed
+
+cd $SLURM_SUBMIT_DIR
+
+#source appropriate environments to enable use of conda installs through batch submission
+source /home/bs66/.bashrc
+source /home/bs66/.bash_profile
+
+#activate conda environment with fastqc and multiqc installed
+conda activate QC
+
+
+#path to filtered illumina reads
+reads="/work/bs66/dasanthera_novaseq/filtered_reads"
+outdir="/work/bs66/dasanthera_novaseq/fastqc_filtered"
+
+#move to directory with reads
+cd $reads
+
+#store fastq files as array
+files=(*.fastq.gz)
+
+#perform fastqc -- distinction from for loop is this can process -t files simultaneously
+fastqc "${files[@]}" -t 20 -o $outdir
+```
