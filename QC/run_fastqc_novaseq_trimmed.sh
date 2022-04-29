@@ -28,4 +28,6 @@ files=(*.fastq.gz)
 #perform fastqc -- distinction from for loop is this can process -t files simultaneously
 fastqc "${files[@]}" -t 20 -o $outdir
 
+#summarize results with multiqc
+multiqc $outdir -o $outdir
 
