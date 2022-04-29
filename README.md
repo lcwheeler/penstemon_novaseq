@@ -39,7 +39,8 @@ cat "$i"_L00*_R2_001.fastq.gz > "$i"_merged_L001_R2_001.fastq.gz
 done;
 ```
 
-#### 2. QC on raw reads with fastqc
+#### 2. QC on raw reads with fastqc, summarized with multiqc
+* see [`run_QC_s2.sh`](https://github.com/benstemon/dasanthera_novaseq/blob/main/QC/run_QC_s2.sh)
 
 #### 3-5. Quality filtering with fastp, and check QC of trimmed reads
 * Default options for quality filtering
