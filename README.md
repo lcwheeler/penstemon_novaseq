@@ -59,8 +59,12 @@ done;
 cd $SLURM_SUBMIT_DIR
 
 
-#path to fastp
-fastpdir="/work/bs66/software"
+#source appropriate environments to enable use of conda installs through batch submission
+source /home/bs66/.bashrc
+source /home/bs66/.bash_profile
+
+#activate conda environment with fastqc and multiqc installed
+conda activate QC
 
 #path to illumina reads
 reads="/work/bs66/dasanthera_novaseq/merged_reads"
@@ -72,14 +76,14 @@ do
     r2in="${r1in/R1_001.fastq.gz/R2_001.fastq.gz}"
     r1out="${r1in##*/}"
     r2out="${r1out/R1_001.fastq.gz/R2_001.fastq.gz}"
-    $fastpdir/./fastp -i "$r1in" -I "$r2in" --out1 "${r1out/merged_L001_R1_001.fastq.gz/trimmed_L001_R1_001.fastq.gz}" --out2 "${r1out/merged_L001_R1_001.fastq.gz/trimmed_L001_R2_001.fastq.gz}" --unpaired1 "${r1out/merged_L001_R1_001.fastq.gz/unpaired_L001_R1_001.fastq.gz}" --unpaired2 "${r1out/merged_L001_R1_001.fastq.gz/unpaired_L001_R2_001.fastq.gz}" -x -c -w 16 -h "${r1out/merged_L001_R1_001.fastq.gz/html}" -j "${r1out/merged_L001_R1_001.fastq.gz/json}"
+    fastp -i "$r1in" -I "$r2in" --out1 "${r1out/merged_L001_R1_001.fastq.gz/trimmed_L001_R1_001.fastq.gz}" --out2 "${r1out/merged_L001_R1_001.fastq.gz/trimmed_L001_R2_001.fastq.gz}" --unpaired1 "${r1out/merged_L001_R1_001.fastq.gz/unpaired_L001_R1_001.fastq.gz}" --unpaired2 "${r1out/merged_L001_R1_001.fastq.gz/unpaired_L001_R2_001.fastq.gz}" -x -c -w 16 -h "${r1out/merged_L001_R1_001.fastq.gz/html}" -j "${r1out/merged_L001_R1_001.fastq.gz/json}"
 done
 ```
 
 This produces trimmed reads, that have been paired (in *trimmed*.fastq.gz) and unpaired (in *unpaired*.fastq.gz).
 Moving forward with mapping, these unpaired reads can be mapped in the same way as paired reads, and then downstream BAMs can be merged with Picard's MergeSamFiles (or some other approach)
 
-#### 4. fastqc on trimmed reads
+#### 4. fastqc on trimmed reads, and summarize with multiqc
 * see [`run_fastqc_novaseq_trimmed.sh`](https://github.com/benstemon/dasanthera_novaseq/blob/main/QC/run_fastqc_novaseq_trimmed.sh)
 
 ```shell
@@ -112,4 +116,7 @@ files=(*.fastq.gz)
 
 #perform fastqc -- distinction from for loop is this can process -t files simultaneously
 fastqc "${files[@]}" -t 20 -o $outdir
+
+#summarize results with multiqc
+multiqc $outdir -o $outdir
 ```
