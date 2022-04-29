@@ -24,7 +24,7 @@ conda activate QC
 mergedreads="/work/bs66/dasanthera_novaseq/merged_reads"
 
 #path to fastp outfiles (creates directory, and replaces is already present)
-out_fastp="/work/bs66/dasanthera_novaseq/filtered_reads"
+out_fastp="/work/bs66/dasanthera_novaseq/filtered_reads_v2"
 rm -r $out_fastp
 mkdir $out_fastp
 
@@ -35,14 +35,8 @@ do
     r2in="${r1in/R1_001.fastq.gz/R2_001.fastq.gz}"
     r1out="${r1in##*/}"
     r2out="${r1out/R1_001.fastq.gz/R2_001.fastq.gz}"
-    fastp -i "$r1in" -I "$r2in" --out1 "${r1out/merged_L001_R1_001.fastq.gz/trimmed_L001_R1_001.fastq.gz}" --out2 "${r1out/merged_L001_R1_001.fastq.gz/trimmed_L001_R2_001.fastq.gz}" --unpaired1 "${r1out/merged_L001_R1_001.fastq.gz/unpaired_L001_R1_001.fastq.gz}" --unpaired2 "${r1out/merged_L001_R1_001.fastq.gz/unpaired_L001_R2_001.fastq.gz}" -x -c -w 16 -h "${r1out/merged_L001_R1_001.fastq.gz/html}" -j "${r1out/merged_L001_R1_001.fastq.gz/json}"
+    fastp -i "$r1in" -I "$r2in" --detect_adapter_for_pe -l 30 --out1 $out_fastp/"${r1out/merged_L001_R1_001.fastq.gz/trimmed_L001_R1_001.fastq.gz}" --out2 $out_fastp/"${r1out/merged_L001_R1_001.fastq.gz/trimmed_L001_R2_001.fastq.gz}" -x -c -w 16 -h $out_fastp/"${r1out/merged_L001_R1_001.fastq.gz/html}" -j $out_fastp/"${r1out/merged_L001_R1_001.fastq.gz/json}"
 done
-
-#move outfiles to correct directory (probably better way to do this)
-mv $mergedreads/*trimmed* $out_fastp
-mv $mergedreads/*unpaired* $out_fastp
-mv $mergedreads/*html $out_fastp
-mv $mergedreads/*json $out_fastp
 
 
 
@@ -50,7 +44,7 @@ mv $mergedreads/*json $out_fastp
 #fastqc+multiqc#
 ################
 
-out_fastqc="/work/bs66/dasanthera_novaseq/fastqc_filtered"
+out_fastqc="/work/bs66/dasanthera_novaseq/fastqc_filtered_v2"
 rm -r $out_fastqc
 mkdir $out_fastqc
 
@@ -67,3 +61,8 @@ fastqc "${files[@]}" -t 20 -o $out_fastqc
 multiqc $out_fastqc -o $out_fastqc
 
 
+###Distinction from v1:
+# in fastp:
+#1. include --detect_adapter_for_pe 
+#2. require reads to be at least 30bp
+#3. do not save the unpaired reads (small proportion, lower quality)
