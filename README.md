@@ -3,19 +3,23 @@
 ### Note: this pipeline requires the use of conda installs of various softwares. For info on navigating installation of these packages with conda on the cluster at South Carolina, see [this readme file](https://github.com/benstemon/dasanthera_novaseq/blob/main/conda_info/README.md)
 
 ### Quality control pipeline
-1. Merge Illumina lanes by forward and reverse reads
-2. Run QC of raw sequencing reads (fastqc)
-3. Trim adapters, quality filter, and enable base correction in overlapped regions (fastp)
-4. Run QC on trimmed, filtered data (fastqc)
-5. Summarize results (multiqc)
+1. Run QC of raw sequencing reads (fastqc)
+2. Merge Illumina lanes by forward and reverse reads
+4. Trim adapters, quality filter, and enable base correction in overlapped regions (fastp)
+5. Run QC on trimmed, filtered data (fastqc)
+6. Summarize results (multiqc)
 
-#### 1. Merge data across lanes
+
+
+#### 1. QC on raw reads with fastqc, summarized with multiqc
+* see [`run_QC_s1.sh`](https://github.com/benstemon/dasanthera_novaseq/blob/main/QC/run_QC_s1.sh)
+
+
+#### 2. Merge data across lanes
 * See [`merge_illumina_lanes.sh`](https://github.com/benstemon/dasanthera_novaseq/blob/main/QC/merge_illumina_lanes.sh)
 
 
 
-#### 2. QC on raw reads with fastqc, summarized with multiqc
-* see [`run_QC_s2.sh`](https://github.com/benstemon/dasanthera_novaseq/blob/main/QC/run_QC_s2.sh)
 
 
 #### 3-5. Quality filtering with fastp, and check QC of trimmed reads
