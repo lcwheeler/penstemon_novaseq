@@ -22,7 +22,9 @@
 
 
 
-#### 3-5. Quality filtering with fastp, and check QC of trimmed reads
+#### 3-5. 
+#### Version 1
+Quality filtering with fastp, and check QC of trimmed reads
 * Default options for quality filtering
 * Base correction for overlapping reads enabled
 * poly-x trimming on 3' ends enabled
@@ -32,3 +34,10 @@
 
 This produces trimmed reads, that have been paired (in *trimmed*.fastq.gz) and unpaired (in *unpaired*.fastq.gz).
 Moving forward with mapping, these unpaired reads can be mapped in the same way as paired reads, and then downstream BAMs can be merged with Picard's MergeSamFiles (or some other approach) 
+
+#### Version 2
+Initial trial highlighted some remaining issues with first fastp run:
+* Still evidence of adapter contamination (v2 enables auto-adapter detection)
+* Some reads probably too short (v2 limits read length to 30 bp vs 15)
+* The unpaired reads appeared to be low quality (v2 does not keep unpaired reads)
+
