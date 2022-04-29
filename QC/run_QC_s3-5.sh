@@ -24,7 +24,7 @@ conda activate QC
 mergedreads="/work/bs66/dasanthera_novaseq/merged_reads"
 
 #path to fastp outfiles (creates directory, and replaces is already present)
-out_fastp="/work/bs66/dasanthera_novaseq/filtered_reads_v2"
+out_fastp="/work/bs66/dasanthera_novaseq/filtered_reads"
 rm -r $out_fastp
 mkdir $out_fastp
 
@@ -44,7 +44,7 @@ done
 #fastqc+multiqc#
 ################
 
-out_fastqc="/work/bs66/dasanthera_novaseq/fastqc_filtered_v2"
+out_fastqc="/work/bs66/dasanthera_novaseq/fastqc_filtered"
 rm -r $out_fastqc
 mkdir $out_fastqc
 
