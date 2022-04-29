@@ -12,35 +12,11 @@
 #### 1. Merge data across lanes
 * See [`merge_illumina_lanes.sh`](https://github.com/benstemon/dasanthera_novaseq/blob/main/QC/merge_illumina_lanes.sh)
 
-```shell
-#!/bin/sh
 
-#SBATCH -N 1
-#SBATCH -n 1
-#SBATCH -p wessinger-48core
-#SBATCH --job-name=merge_lanes
-
-#Note: I found this script from here:
-#https://www.biostars.org/p/317385/
-
-cd $SLURM_SUBMIT_DIR
-
-
-for i in $(find ./ -type f -name "*.fastq.gz" | while read F; do basename $F | rev | cut -c 22- | rev; done | sort | uniq)
-
-    do echo "Merging R1"
-
-cat "$i"_L00*_R1_001.fastq.gz > "$i"_merged_L001_R1_001.fastq.gz
-
-       echo "Merging R2"
-
-cat "$i"_L00*_R2_001.fastq.gz > "$i"_merged_L001_R2_001.fastq.gz
-
-done;
-```
 
 #### 2. QC on raw reads with fastqc, summarized with multiqc
 * see [`run_QC_s2.sh`](https://github.com/benstemon/dasanthera_novaseq/blob/main/QC/run_QC_s2.sh)
+
 
 #### 3-5. Quality filtering with fastp, and check QC of trimmed reads
 * Default options for quality filtering
@@ -49,75 +25,6 @@ done;
 * Unmerged reads that pass filter are included in separate files (default is to delete. reads failing to pass filter are not included)
 * See [`run_QC_s3-5.sh`](https://github.com/benstemon/dasanthera_novaseq/blob/main/QC/run_QC_s3-5.sh)
 
-```shell
-#!/bin/sh
-
-#SBATCH -N 1
-#SBATCH -n 20
-#SBATCH -p wessinger-48core
-#SBATCH --job-name=QC_s3-5
-
-cd $SLURM_SUBMIT_DIR
-
-
-#source appropriate environments to enable use of conda installs through batch submission
-source /home/bs66/.bashrc
-source /home/bs66/.bash_profile
-
-#activate conda environment with QC packages installed
-conda activate QC
-
-
-#######
-#fastp#
-#######
-
-#path to illumina mergedreads
-mergedreads="/work/bs66/dasanthera_novaseq/merged_reads"
-
-#path to fastp outfiles (creates directory, and replaces is already present)
-out_fastp="/work/bs66/dasanthera_novaseq/filtered_reads"
-rm -r $out_fastp
-mkdir $out_fastp
-
-
-#fastp for loop
-for r1in in $mergedreads/*_R1_001.fastq.gz; 
-do
-    r2in="${r1in/R1_001.fastq.gz/R2_001.fastq.gz}"
-    r1out="${r1in##*/}"
-    r2out="${r1out/R1_001.fastq.gz/R2_001.fastq.gz}"
-    fastp -i "$r1in" -I "$r2in" --out1 "${r1out/merged_L001_R1_001.fastq.gz/trimmed_L001_R1_001.fastq.gz}" --out2 "${r1out/merged_L001_R1_001.fastq.gz/trimmed_L001_R2_001.fastq.gz}" --unpaired1 "${r1out/merged_L001_R1_001.fastq.gz/unpaired_L001_R1_001.fastq.gz}" --unpaired2 "${r1out/merged_L001_R1_001.fastq.gz/unpaired_L001_R2_001.fastq.gz}" -x -c -w 16 -h "${r1out/merged_L001_R1_001.fastq.gz/html}" -j "${r1out/merged_L001_R1_001.fastq.gz/json}"
-done
-
-#move outfiles to correct directory (probably better way to do this)
-mv $mergedreads/*trimmed* $out_fastp
-mv $mergedreads/*unpaired* $out_fastp
-mv $mergedreads/*html $out_fastp
-mv $mergedreads/*json $out_fastp
-
-
-
-################
-#fastqc+multiqc#
-################
-
-out_fastqc="/work/bs66/dasanthera_novaseq/fastqc_filtered"
-rm -r $out_fastqc
-mkdir $out_fastqc
-
-#move to directory with reads (fastp outfile directory)
-cd $out_fastp
-
-#store fastq files as array
-files=(*.fastq.gz)
-
-#perform fastqc -- distinction from for loop is this can process -t files simultaneously
-fastqc "${files[@]}" -t 20 -o $out_fastqc
-
-#summarize results with multiqc
-multiqc $out_fastqc -o $out_fastqc
-```
 
 This produces trimmed reads, that have been paired (in *trimmed*.fastq.gz) and unpaired (in *unpaired*.fastq.gz).
 Moving forward with mapping, these unpaired reads can be mapped in the same way as paired reads, and then downstream BAMs can be merged with Picard's MergeSamFiles (or some other approach) 
