@@ -3,7 +3,7 @@
 ### Note: this pipeline requires the use of conda installs of various softwares. For info on navigating installation of these packages with conda on the cluster at South Carolina, see [this readme file](https://github.com/benstemon/dasanthera_novaseq/blob/main/conda_info/README.md)
 
 ### Quality control pipeline
-1. Run QC of raw sequencing reads (fastqc)
+1. Run QC of raw sequencing reads (fastqc) and summarize (multiqc)
 2. Merge Illumina lanes by forward and reverse reads
 4. Trim adapters, quality filter, and enable base correction in overlapped regions (fastp)
 5. Run QC on trimmed, filtered data (fastqc)
@@ -22,8 +22,8 @@
 
 
 
-#### 3-5. 
-#### Version 1
+#### 3-5. Trimming and quality filtering (fastp), check QC on filtered reads (fastqc) and summarize (multiqc)
+#### Trial 1:
 Quality filtering with fastp, and check QC of trimmed reads
 * Default options for quality filtering
 * Base correction for overlapping reads enabled
@@ -33,16 +33,11 @@ This produces trimmed reads, that have been paired (in *trimmed*.fastq.gz) and u
 Moving forward with mapping, these unpaired reads can be mapped in the same way as paired reads, and then downstream BAMs can be merged with Picard's MergeSamFiles (or some other approach) 
 
 **However, the initial trial highlighted some remaining issues, which were remediated in a second trial:**
-* Still evidence of adapter contamination (v2 enables auto-adapter detection)
-* Some reads probably too short (v2 limits read length to 30 bp vs 15)
-* The unpaired reads appeared to be low quality (v2 does not keep unpaired reads)
+* Still evidence of adapter contamination (didn't realize default auto-detection of adapters is off for PE data)
+* Some reads probably too short (I now limit read length to 30 bp vs 15)
+* The unpaired reads appeared to be low quality (I now do not keep unpaired reads)
 
 **For the finalized version of steps 3-5:**
 * See [`run_QC_s3-5.sh`](https://github.com/benstemon/dasanthera_novaseq/blob/main/QC/run_QC_s3-5.sh)
-
-
-
-
-#### Version 2
 
 
