@@ -38,6 +38,12 @@ r1s=(*R1_001.fastq.gz)
 read1="${r1s[$SLURM_ARRAY_TASK_ID]}"
 read2="${read1/L001_R1/L001_R2}"
 
+#pipeline:
+#1. align
+#2. convert sam to bam and fix read pairing info
+#3. sort BAM by coordinates
+#4. mark and remove duplicates
+#5. index files
 
 #mapping and cleaning pipeline
 bwa mem -t 8 -M $refgenome $read1 $read2 | samtools fixmate -@ 8 -m -u -O bam - - | samtools sort -@ 8 -u | samtools markdup -@ 8 -u -s - - | bam clipOverlap --in -.ubam --out $outdir/"${read1/trimmed_L001_R1_001.fastq.gz/mapped_marked.bam}" --stats
