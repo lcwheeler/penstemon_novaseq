@@ -1,1 +1,1 @@
-#Directory for genotype and SNP calling
+# Directory for genotype and SNP calling
