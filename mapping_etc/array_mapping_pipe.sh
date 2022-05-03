@@ -60,7 +60,7 @@ cd $outdir
 samtools coverage -m -A -w 40 "${read1/trimmed_L001_R1_001.fastq.gz/mapped_marked.bam}" > $statsdir/"${read1/trimmed_L001_R1_001.fastq.gz/coverage.txt}"
 
 #you can tweak this to see how filtering out low quality mapped reads and duplicates would affect results
-samtools coverage -m -A -w 40 -q 20 --ff "${read1/trimmed_L001_R1_001.fastq.gz/mapped_marked.bam}" > $statsdir/"${read1/trimmed_L001_R1_001.fastq.gz/coverage_MQ20_dedup.txt}"
+samtools coverage -m -A -w 40 -q 20 --ff DUP "${read1/trimmed_L001_R1_001.fastq.gz/mapped_marked.bam}" > $statsdir/"${read1/trimmed_L001_R1_001.fastq.gz/coverage_MQ20_dedup.txt}"
 
 
 
