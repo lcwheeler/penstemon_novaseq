@@ -5,7 +5,7 @@ import os
 input_file = sys.argv[1]
 windowsize = int(sys.argv[2])
 prefix = sys.argv[3]
-missingthresh = 1.00 #any window with an individual with this proportion of missing data or higher will be removed
+missingthresh = 0.75 #any window with an individual with this proportion of missing data or higher will be removed
 
 
 #generate info about alignment and number of cycles needed
@@ -39,9 +39,12 @@ for i in range(1,cycles+1):
                         name_line = fasta_line
                     elif len(fasta_line) > 0:
                         seq_line = fasta_line
-                        fasta_output.write(name_line+'\n')
-                        fasta_output.write(seq_line[windowstart:windowend]+'\n')
-                        missingcount = seq_line[windowstart:windowend].count('-')
+                        if name_line.startswith('>REF '):#remove reference sequence
+                            missingcount = 0
+                        else:
+                            fasta_output.write(name_line+'\n')
+                            fasta_output.write(seq_line[windowstart:windowend]+'\n')
+                            missingcount = seq_line[windowstart:windowend].count('-')
                         if missingcount/windowsize >= missingthresh:
                             deletefile = True
         if deletefile == True:
