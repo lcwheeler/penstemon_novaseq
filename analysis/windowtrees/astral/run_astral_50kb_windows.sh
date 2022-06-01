@@ -19,4 +19,4 @@ outpath="/work/bs66/dasanthera_novaseq/analysis_astral"
 
 
 #run astral
-java -jar $astral -i $treefile -a $outpath/namemap_astral_v1.txt --outgroup P_montanus -o $outpath/species_tree_astral.tre
+java -jar $astral -i $treefile -a $outpath/namemap_astral_v1.txt --outgroup P_montanus -o $outpath/astral_tree_50kb_v1.tre
