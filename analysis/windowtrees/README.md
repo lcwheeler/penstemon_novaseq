@@ -30,4 +30,3 @@ done
     * see `namemap_astral_v1.txt`
 * run ASTRAL
     * see `run_astral_50kb_windows.sh`
-    `java -jar $astral -i $treefile -a $outpath/namemap_astral_v1.txt --outgroup P_montanus -o $outpath/species_tree_astral.tre`
