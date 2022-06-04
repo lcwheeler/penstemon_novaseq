@@ -26,6 +26,15 @@ do
     cat $i/*.treefile >> combined_50kb_trees.tre
 done
 ```
+* also, keep a log of which trees were catted to the treefile, and in what order. This will come in handy later.
+```shell
+for i in *_window;
+do
+    echo $i/*.treefile | tr " " "\n" >> tmpout.txt
+done
+cat --number tmpout.txt > numbered_treepaths.txt
+rm tmpout.txt
+```
 * then, set up namefile, to assign taxa in gene trees to species tree
     * see `namemap_astral_v1.txt`
 * run ASTRAL
