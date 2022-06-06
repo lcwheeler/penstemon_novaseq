@@ -49,6 +49,7 @@ rm tmpout.txt
     * See `popfile_pixy.txt`
 * Run pixy along each major scaffold in windows of 50kb (same size as sliding window trees)
     * See `array_pixy_50kb_windows.sh`
+* Plot results with [`plot_pixy_output.R`](https://github.com/benstemon/dasanthera_novaseq/blob/main/analysis/analysis_pixy_50kb/plot_pixy_output.R)
 
 
 
