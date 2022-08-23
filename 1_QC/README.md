@@ -1,28 +1,30 @@
 ## NovaSeq data for 18 accessions of *Penstemon* subgenus *Dasanthera*
 
-### Note: this pipeline requires the use of conda installs of various softwares. For info on navigating installation of these packages with conda on the cluster at South Carolina, see [this readme file](https://github.com/benstemon/dasanthera_novaseq/blob/main/conda_info/README.md)
+### Note: this pipeline requires the use of conda installs of various softwares. For info on navigating installation of these packages with conda on the cluster at South Carolina, see [this readme file](dasanthera_novaseq/conda_info/README.md)
 
 ### Quality control pipeline
 1. Run QC of raw sequencing reads (fastqc) and summarize (multiqc)
 2. Merge Illumina lanes by forward and reverse reads
-4. Trim adapters, quality filter, and enable base correction in overlapped regions (fastp)
-5. Run QC on trimmed, filtered data (fastqc)
-6. Summarize results (multiqc)
+3. 
+    a. Trim adapters, quality filter, and enable base correction in overlapped regions (fastp)
+    b. Run QC on trimmed, filtered data (fastqc)
+    c. Summarize results (multiqc)
 
 
 
 #### 1. QC on raw reads with fastqc, summarized with multiqc
-* see [`run_QC_s1.sh`](https://github.com/benstemon/dasanthera_novaseq/blob/main/QC/run_QC_s1.sh)
+* see [`QC_s1_rawqc-summarize.sh`](QC_s1_rawqc-summarize.sh)
 
 
 #### 2. Merge data across lanes
-* See [`merge_illumina_lanes.sh`](https://github.com/benstemon/dasanthera_novaseq/blob/main/QC/merge_illumina_lanes.sh)
+* See [`QC_s2_merge-illumina-lanes.sh`](QC_s2_merge-illumina-lanes.sh)
+* After using this script, move the merged reads to a new directory
 
 
 
 
 
-#### 3-5. Trimming and quality filtering (fastp), check QC on filtered reads (fastqc) and summarize (multiqc)
+#### 3a-c. Trimming and quality filtering (fastp), check QC on filtered reads (fastqc) and summarize (multiqc)
 #### Trial 1:
 Quality filtering with fastp, and check QC of trimmed reads
 * Default options for quality filtering
@@ -37,7 +39,7 @@ Moving forward with mapping, these unpaired reads can be mapped in the same way 
 * Some reads probably too short (I now limit read length to 30 bp vs 15)
 * The unpaired reads appeared to be low quality (I now do not keep unpaired reads)
 
-**For the finalized version of steps 3-5:**
-* See [`run_QC_s3-5.sh`](https://github.com/benstemon/dasanthera_novaseq/blob/main/QC/run_QC_s3-5.sh)
+**For the finalized version of steps 3a-c:**
+* See [`QC_s3_fastp-filterqc-summarize.sh`](QC_s3_fastp-filterqc-summarize.sh)
 
 

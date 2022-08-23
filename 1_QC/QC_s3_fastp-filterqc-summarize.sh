@@ -3,7 +3,7 @@
 #SBATCH -N 1
 #SBATCH -n 20
 #SBATCH -p wessinger-48core
-#SBATCH --job-name=QC_s3-5
+#SBATCH --job-name=QC_s3a-c
 
 cd $SLURM_SUBMIT_DIR
 
