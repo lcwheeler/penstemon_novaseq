@@ -1,6 +1,6 @@
 ## NovaSeq data for 18 accessions of *Penstemon* subgenus *Dasanthera*
 
-### Note: this pipeline requires the use of conda installs of various softwares. For info on navigating installation of these packages with conda on the cluster at South Carolina, see [this readme file](dasanthera_novaseq/conda_info/README.md)
+### Note: this pipeline requires the use of conda installs of various softwares. For info on navigating installation of these packages with conda on the cluster at South Carolina, see [this readme file](/dasanthera_novaseq/conda_info/README.md)
 
 ### Quality control pipeline
 1. Run QC of raw sequencing reads (fastqc) and summarize (multiqc)
