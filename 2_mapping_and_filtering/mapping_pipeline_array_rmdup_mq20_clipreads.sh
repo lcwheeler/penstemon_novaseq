@@ -3,11 +3,11 @@
 #SBATCH -N 1
 #SBATCH -n 8
 #SBATCH -p wessinger-48core
-#SBATCH --job-name=mapping_piped
+#SBATCH --job-name=mapping_pipeline
 
 #NOTE: this is an arrayed batch script. It requires special syntax to submit job.
 #I have 18 total samples, and because counting starts at 0:
-#submit with sbatch --array [0-17] array_mapping_pipe.sh
+#submit with sbatch --array [0-17] mapping_pipeline_array_rmdup_mq20_clipreads.sh
 
 
 cd $SLURM_SUBMIT_DIR
@@ -24,11 +24,13 @@ source /home/bs66/.bash_profile
 conda activate mapping_etc
 
 
-#hard path to the filtered reads, reference genome, and out directory for mapped files
+#hard path to the filtered reads and reference genome
 filtered_reads="/work/bs66/dasanthera_novaseq/filtered_reads"
 refgenome="/work/bs66/project_compare_genomes/annot_Pdavidsonii_genome.1mb.fasta"
+
+#path to the out directories for filtered bams and summary stats. Make prior to running
 outdir="/work/bs66/dasanthera_novaseq/mapped_filtered_bams"
-statsdir="/work/bs66/dasanthera_novaseq/sumstats_marked_bams"
+statsdir="/work/bs66/dasanthera_novaseq/sumstats_mapped_filtered_bams"
 numthreads=8 #change this to match number of cores allocated
 
 
@@ -39,17 +41,22 @@ r1s=(*R1_001.fastq.gz)
 read1="${r1s[$SLURM_ARRAY_TASK_ID]}"
 read2="${read1/L001_R1/L001_R2}"
 
-#pipeline:
-#1. align
-#2. convert sam to bam and fix read pairing info
-#3. sort BAM by coordinates
-#4. mark and remove duplicates
-#5. remove reads with MQ < 20
-#6. clip read overlaps
-#7. index files
 
-#mapping and cleaning pipeline
-bwa mem -t $numthreads -M $refgenome $read1 $read2 | samtools fixmate -@ $numthreads -m -u -O bam - - | samtools sort -@ $numthreads -u | samtools markdup -r -@ $numthreads -u -s - - | samtools view -@ $numthreads -h -q 20 -u | bam clipOverlap --in -.ubam --out $outdir/"${read1/trimmed_L001_R1_001.fastq.gz/mapped_filtered.bam}" --stats
+#mapping and cleaning pipeline:
+#1. map with bwa mem
+#2. fixmate -m fills in mate coords and add score tags to tell markdup which reads to keep
+#3. sort alignment (put mapped reads in physical order)
+#4. markdup marks and removes (-r) duplicate reads
+#5. view filters to retain only reads with mapping quality >20 (99% mapping confidence)
+#6. bam clipOverlap softclips read overlaps
+
+bwa mem -t $numthreads -M $refgenome $read1 $read2 | \
+ samtools fixmate -@ $numthreads -m -u -O bam - - | \
+ samtools sort -@ $numthreads -u | \
+ samtools markdup -r -@ $numthreads -u -s - - | \
+ samtools view -@ $numthreads -h -q 20 -u | \
+ bam clipOverlap --in -.ubam \
+ --out $outdir/"${read1/trimmed_L001_R1_001.fastq.gz/mapped_filtered.bam}" --stats
 
 #index reads
 samtools index -b $outdir/"${read1/trimmed_L001_R1_001.fastq.gz/mapped_filtered.bam}"
@@ -62,5 +69,7 @@ samtools coverage -m -A -w 40 "${read1/trimmed_L001_R1_001.fastq.gz/mapped_filte
 
 #OTHER SUMMARY STATS
 #piping just the summary numbers part of this command 
-samtools stats -@ $numthreads -r $refgenome "${read1/trimmed_L001_R1_001.fastq.gz/mapped_filtered.bam}" | grep -n "^SN" | cut -f 2- > $statsdir/"${read1/trimmed_L001_R1_001.fastq.gz/summarystats.txt}"
+samtools stats -@ $numthreads -r $refgenome "${read1/trimmed_L001_R1_001.fastq.gz/mapped_filtered.bam}" | \
+ grep -n "^SN" | \
+ cut -f 2- > $statsdir/"${read1/trimmed_L001_R1_001.fastq.gz/summarystats.txt}"
 
