@@ -43,12 +43,12 @@ read2="${read1/L001_R1/L001_R2}"
 
 
 #mapping and cleaning pipeline:
-#1. map with bwa mem
-#2. fixmate -m fills in mate coords and add score tags to tell markdup which reads to keep
-#3. sort alignment (put mapped reads in physical order)
-#4. markdup marks and removes (-r) duplicate reads
-#5. view filters to retain only reads with mapping quality >20 (99% mapping confidence)
-#6. bam clipOverlap softclips read overlaps
+#a. map with bwa mem
+#b. fixmate -m fills in mate coords and add score tags to tell markdup which reads to keep
+#c. sort alignment (put mapped reads in physical order)
+#d. markdup marks and removes (-r) duplicate reads
+#e. view filters to retain only reads with mapping quality >20 (99% mapping confidence)
+#f. bam clipOverlap softclips read overlaps
 
 bwa mem -t $numthreads -M $refgenome $read1 $read2 | \
  samtools fixmate -@ $numthreads -m -u -O bam - - | \

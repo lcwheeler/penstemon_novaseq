@@ -6,5 +6,5 @@
 * Overlapping paired end reads clipped with bamutil clipOverlap
 * Some basic summary statistics generated with samtools coverage and samtools stats
 
-All of the main commands are piped to avoid the creation of many intermediate files. See [`mapping_pipeline_array_rmdup_mq20_clipreads.sh`](mapping_pipeline_array_rmdup_mq20_clipreads.sh)
+All of the main commands are piped to avoid the creation of many intermediate files. See [`mapping_pipeline_array_s1a-f.sh`](mapping_pipeline_array_s1a-f.sh)
   * Uses bwa, samtools v1.15.1, and bamUtil v1.0.15
