@@ -82,7 +82,7 @@ tabix $outdir/tmp-variants_filtered.vcf.gz
 #concatenate the two vcfs and remove tmp files
 bcftools concat $outdir/tmp-invariants_filtered.vcf.gz \
  $outdir/tmp-variants_filtered.vcf.gz \
- --threads 4 -a -Oz \
+ --threads $numthreads -a -Oz \
  -o $outdir/filtered_consensus-ready.vcf.gz
 
 rm $outdir/tmp-invariants_filtered.vcf.gz*
