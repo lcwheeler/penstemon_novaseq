@@ -35,8 +35,8 @@ annotations_file="/work/bs66/project_compare_genomes/annot_Pdavidsonii_gffread.g
 mapped_filtered_reads="/work/bs66/dasanthera_novaseq/mapped_filtered_bams"
 
 
-#Location of unfiltered vcf, from script #2 in this pipeline.
-invcf="/work/bs66/dasanthera_novaseq/GVCF_VCF_unfiltered/unfiltered_vcf.gz"
+#Location of filtered vcf, from script #3 in this pipeline.
+invcf="/work/bs66/dasanthera_novaseq/GVCF_VCFs/CHANGETHIS.vcf.gz"
 
 
 #path to the output directory for consensus sequence alignments. Make prior to running.

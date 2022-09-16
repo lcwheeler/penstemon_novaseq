@@ -8,13 +8,6 @@
 
 cd $SLURM_SUBMIT_DIR
 
-#activate conda environment with packages installed
-#needs samtools (v1.15.1 works) and bcftools (v1.15.1 works)
-conda activate mapping_etc
-
-#load vcftools (v0.1.17 on cluster works)
-module load vcftools
-
 
 #######
 #SETUP#
@@ -26,12 +19,20 @@ source /home/bs66/.bashrc
 source /home/bs66/.bash_profile
 
 
+#activate conda environment with packages installed
+#needs samtools (v1.15.1 works) and bcftools (v1.15.1 works)
+conda activate mapping_etc
+
+#load vcftools (v0.1.17 on cluster works)
+module load vcftools
+
+
 #Location of unfiltered vcf, from script #2 in this pipeline.
-invcf="/work/bs66/dasanthera_novaseq/GVCF_VCF_unfiltered/unfiltered_vcf.gz"
+invcf="/work/bs66/dasanthera_novaseq/GVCF_VCFs/unfiltered_vcf.gz"
 
 
 #path to the output directory for vcfs and gvcfs. Should be made already.
-outdir="/work/bs66/dasanthera_novaseq/GVCF_VCF_unfiltered"
+outdir="/work/bs66/dasanthera_novaseq/GVCF_VCFs"
 
 
 #number of cores used converting from gvcf to vcf
