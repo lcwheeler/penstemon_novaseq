@@ -3,7 +3,7 @@
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH -p wessinger-48core
-#SBATCH --job-name=quibl_evo2022
+#SBATCH --job-name=gffread
 
 
 cd $SLURM_SUBMIT_DIR

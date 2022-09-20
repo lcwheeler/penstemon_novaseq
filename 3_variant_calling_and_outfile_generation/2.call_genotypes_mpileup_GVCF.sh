@@ -45,14 +45,15 @@ bamlist=($mapped_filtered_reads/*.bam)
 
 #Produce GT likelihoods, call variants, and normalize indels -> unfiltered .vcf
 #mpileup produces genotype likelihoods from bam files. Filtering for BQ and MQ > 20
+#--gvcf call contiguous reference haplotype blocks. require at least 2 reads for inclusion
 #call calls SNPs and indels from the genotype likelihoods
 #norm normalizes and left-aligns indels
 bcftools mpileup --threads $numthreads -Ou \
  -a FORMAT/AD,FORMAT/DP \
  --min-BQ 20 \
  --min-MQ 20 \
- --gvcf 0 -f $refgenome ${bamlist[@]} | 
- bcftools call --threads $numthreads -m --gvcf 0 -Ou | 
+ --gvcf 0,2 -f $refgenome ${bamlist[@]} | 
+ bcftools call --threads $numthreads -m --gvcf 2 -Ou | 
  bcftools norm --threads $numthreads -f $refgenome \
  -Oz -o $outdir/unfiltered_gvcf.gz
 
@@ -66,7 +67,7 @@ bcftools convert --gvcf2vcf \
  --fasta-ref $refgenome \
  --threads $numthreads \
  $outdir/unfiltered_gvcf.gz | 
- bgzip -c --threads $numthreads > $outdir/filtered_vcf.gz
+ bgzip -c --threads $numthreads > $outdir/unfiltered_vcf.gz
 
 #index the vcf
 tabix $outdir/unfiltered_vcf.gz

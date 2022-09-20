@@ -5,17 +5,10 @@
 #SBATCH -p wessinger-48core
 #SBATCH --job-name=variants_bcftools
 
-###NOTE: this is set up as a batch array script. SLURM submit array code begins on line 50.
+###NOTE: this is set up as a batch array script. SLURM submit array code begins on line 46.
 
 
 cd $SLURM_SUBMIT_DIR
-
-#activate conda environment with packages installed
-#needs samtools (v1.15.1 works) and bcftools (v1.15.1 works)
-conda activate mapping_etc
-
-#load vcftools (v0.1.17 on cluster works)
-module load vcftools
 
 
 #######
@@ -27,16 +20,20 @@ module load vcftools
 source /home/bs66/.bashrc
 source /home/bs66/.bash_profile
 
+#activate conda environment with packages installed
+#needs samtools (v1.15.1 works) and bcftools (v1.15.1 works)
+conda activate mapping_etc
 
-#hard path to the reference genome and annotations file of interest
+
+#hard path to the reference genome and the samtools faidx index of the genome
 #mapped filtered reads should not have a "/" at the end. This should be the same directory as output from script: mapping_pipeline_array_s1a-f.sh
 refgenome="/work/bs66/project_compare_genomes/annot_Pdavidsonii_genome.1mb.fasta"
-annotations_file="/work/bs66/project_compare_genomes/annot_Pdavidsonii_gffread.genes.bed"
+faidxfile="/work/bs66/project_compare_genomes/annot_Pdavidsonii_genome.1mb.fasta.fai"
 mapped_filtered_reads="/work/bs66/dasanthera_novaseq/mapped_filtered_bams"
 
 
 #Location of filtered vcf, from script #3 in this pipeline.
-invcf="/work/bs66/dasanthera_novaseq/GVCF_VCFs/CHANGETHIS.vcf.gz"
+invcf="/work/bs66/dasanthera_novaseq/GVCF_VCFs/filtered_consensus-ready.vcf.gz"
 
 
 #path to the output directory for consensus sequence alignments. Make prior to running.
@@ -52,39 +49,35 @@ numthreads=8
 #if sample names were changed at some point in .vcf, this will throw an error
 #infile is the full path to each input bam file
 #insample is just the sample name (no path)
+#for batch array, sbatch --array [0-n], where n is number of .bam files in $mapped_filtered_reads -1
 filelist=($mapped_filtered_reads/*.bam)
 infile="${filelist[$SLURM_ARRAY_TASK_ID]}"
 
 insample=${infile%_mapped_filtered.bam}
 insample=${insample##*/}
 
+#get list of scaffold names from samtools index
+scaffoldnames=$(awk '{print $1}' $faidxfile)
 
 ########################
-
-
-
-
-
-
-
-#2. index the reference for annotations of interest (not needed for full genome)
-#3. pipe this into bcftools consensus to generate sequence alignment for samples
-
-
-
-
-###vcftools code -- sort that after I make sure the second part is working
+#1. index the reference for annotations of interest (just scaffold names if whole genome)
+#2. pipe this into bcftools consensus to generate sequence alignment for samples
 
 
 #generate consensus sequence
-#if we want to pipe in 
-bcftools consensus -f $refgenome \
- --iupac-codes \
+#--haplotype I outputs IUPAC ambiguity codes based on sample genotypes
+#--absent changes all sites not included in the vcf to "N" (rather than to consensus)
+#--missing changes all ./. sites in vcf to "N"
+#--mark-del changes deletions to "-"
+#--regions specifies which scaffolds you want to consider (if you don't specify, it only does one scaffold)
+#--sample is specifying which sample to generate sequence for -- this is why array is used
+
+samtools faidx $refgenome ${scaffoldnames[@]} | 
+ bcftools consensus --haplotype I \
  --absent "N" \
  --missing "N" \
  --mark-del "-" \
  --sample $infile \
- $invcf -o $outdir/test_consensus_fullgenome_onesample.fa
-
+ $invcf > $outdir/consensus_fullgenome_$insample.fa
 
 

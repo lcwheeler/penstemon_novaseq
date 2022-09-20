@@ -61,14 +61,18 @@ numthreads=8
 #note that exact parameter values should be thought out on analysis-by-analysis basis. This script is for filtering with the eventual goal of generating multiple sequence alignments (phylogenomics!). So, some of the population-genomic filters common at the vcf filtering stage are not helpful here (e.g., filtering on minor allele frequency, HWE proportions, etc.).
 
 #--min-alleles 2 means there must be at least two alleles (variant)
-#--minGQ recode genotypes below GQ [int] as missing
+#--minGQ recode genotypes below GQ [int] as missing. GQ 20 = 1% chance the call is wrong
 # meanDP filters remove sites with mean allelic depths outside specified limits [int]
+#--minDP recodes any genotypes with fewer than [int] reads as missing
+#--minQ filters sites below [int] quality threshold. Q20 = 1% chance there is no variant
 #--max-missing removes sites on basis of missing data (1 = no missing data allowed)
  vcftools --gzvcf $invcf \
  --min-alleles 2 \
- --minGQ 15 \
+ --minGQ 20 \
  --min-meanDP 3 \
  --max-meanDP 30 \
+ --minDP 2 \
+ --minQ 20 \
  --max-missing 0.80 \
  --recode --recode-INFO-all --stdout | 
  bgzip -c > $outdir/tmp-variants_filtered.vcf.gz

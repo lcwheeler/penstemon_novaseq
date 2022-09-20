@@ -3,3 +3,10 @@
 
 ### In testing phase
 This directory is still in testing and optimization phase. Check back soon ;)
+
+
+samtools faidx $reference genome
+
+
+
+## check the formatting for the other READMEs
