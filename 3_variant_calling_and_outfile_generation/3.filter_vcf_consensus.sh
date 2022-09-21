@@ -50,9 +50,10 @@ numthreads=8
 
 #only invariant sites.
 #max-maf 0 means no sites with minor allele frequency > 0.
-#we don't need filters on these sites -- just pull them out so they aren't removed when filtering the variant sites.
+#we will only filter for minimum allele depth here
  vcftools --gzvcf $invcf \
  --max-maf 0 \
+ --minDP 2 \
  --recode --recode-INFO-all --stdout | 
  bgzip -c > $outdir/tmp-invariants_filtered.vcf.gz
 
@@ -70,12 +71,18 @@ numthreads=8
  --min-alleles 2 \
  --minGQ 20 \
  --min-meanDP 3 \
- --max-meanDP 30 \
+ --max-meanDP 40 \
  --minDP 2 \
- --minQ 20 \
+#ORIGINAL -- minQ20 missing --minQ 20 \ -
  --max-missing 0.80 \
  --recode --recode-INFO-all --stdout | 
- bgzip -c > $outdir/tmp-variants_filtered.vcf.gz
+#changes added
+ bcftools filter --soft-filter LowQual \
+ --exclude '%QUAL<20'
+ --set-GTs 0 \
+ --threads $numthreads -Oz \
+ -o $outdir/tmp-variants_filtered.vcf.gz
+# bgzip -c > $outdir/tmp-variants_filtered.vcf.gz
 
 
 #index both vcfs
@@ -86,7 +93,7 @@ tabix $outdir/tmp-variants_filtered.vcf.gz
 #concatenate the two vcfs and remove tmp files
 bcftools concat $outdir/tmp-invariants_filtered.vcf.gz \
  $outdir/tmp-variants_filtered.vcf.gz \
- --threads $numthreads -a -Oz \
+ --threads $numthreads --allow-overlaps -Oz \
  -o $outdir/filtered_consensus-ready.vcf.gz
 
 rm $outdir/tmp-invariants_filtered.vcf.gz*
