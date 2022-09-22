@@ -66,8 +66,9 @@ tabix $outdir/unfiltered_gvcf.gz
 bcftools convert --gvcf2vcf \
  --fasta-ref $refgenome \
  --threads $numthreads \
- $outdir/unfiltered_gvcf.gz | 
- bgzip -c --threads $numthreads > $outdir/unfiltered_vcf.gz
+ $outdir/unfiltered_gvcf.gz \
+ -Oz -o $outdir/unfiltered_vcf.gz
+
 
 #index the vcf
 tabix $outdir/unfiltered_vcf.gz

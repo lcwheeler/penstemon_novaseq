@@ -33,7 +33,7 @@ mapped_filtered_reads="/work/bs66/dasanthera_novaseq/mapped_filtered_bams"
 
 
 #Location of filtered vcf, from script #3 in this pipeline.
-invcf="/work/bs66/dasanthera_novaseq/GVCF_VCFs/filtered_consensus-ready.vcf.gz"
+invcf="/work/bs66/dasanthera_novaseq/GVCF_VCFs/filtered_consensus_ready.vcf.gz"
 
 
 #path to the output directory for consensus sequence alignments. Make prior to running.

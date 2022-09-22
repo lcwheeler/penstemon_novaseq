@@ -1,9 +1,9 @@
 #!/bin/sh
 
 #SBATCH -N 1
-#SBATCH -n 8
+#SBATCH -n 16
 #SBATCH -p wessinger-48core
-#SBATCH --job-name=filter_vcf_consensus-ready
+#SBATCH --job-name=filter_variants
 
 
 cd $SLURM_SUBMIT_DIR
@@ -20,7 +20,7 @@ source /home/bs66/.bash_profile
 
 
 #activate conda environment with packages installed
-#needs samtools (v1.15.1 works) and bcftools (v1.15.1 works)
+#need bcftools (v1.15.1 works)
 conda activate mapping_etc
 
 #load vcftools (v0.1.17 on cluster works)
@@ -36,7 +36,7 @@ outdir="/work/bs66/dasanthera_novaseq/GVCF_VCFs"
 
 
 #number of cores used converting from gvcf to vcf
-numthreads=8
+numthreads=16
 
 
 ########################
@@ -48,60 +48,32 @@ numthreads=8
 #We must filter variant and invariant sites separately -- applying the same filters to all sites would remove invariant sites because of the way they are coded in the file.
 
 
-#only invariant sites.
-#max-maf 0 means no sites with minor allele frequency > 0.
-#we will only filter for minimum allele depth here
- vcftools --gzvcf $invcf \
- --max-maf 0 \
- --minDP 2 \
- --recode --recode-INFO-all --stdout | 
- bgzip -c > $outdir/tmp-invariants_filtered.vcf.gz
-
-
 #only variant sites. filters on QUALITY, DEPTH, and MISSIGNESS of reads.
 #note that exact parameter values should be thought out on analysis-by-analysis basis. This script is for filtering with the eventual goal of generating multiple sequence alignments (phylogenomics!). So, some of the population-genomic filters common at the vcf filtering stage are not helpful here (e.g., filtering on minor allele frequency, HWE proportions, etc.).
 
+#VCFTOOLS
 #--min-alleles 2 means there must be at least two alleles (variant)
 #--minGQ recode genotypes below GQ [int] as missing. GQ 20 = 1% chance the call is wrong
 # meanDP filters remove sites with mean allelic depths outside specified limits [int]
 #--minDP recodes any genotypes with fewer than [int] reads as missing
 #--minQ filters sites below [int] quality threshold. Q20 = 1% chance there is no variant
 #--max-missing removes sites on basis of missing data (1 = no missing data allowed)
- vcftools --gzvcf $invcf \
+
+#BCFTOOLS
+# these commands soft filter variants with QUAL <20 and change GTs to reference sequence
+vcftools --gzvcf $invcf \
  --min-alleles 2 \
  --minGQ 20 \
  --min-meanDP 3 \
  --max-meanDP 40 \
  --minDP 2 \
-#ORIGINAL -- minQ20 missing --minQ 20 \ -
  --max-missing 0.80 \
  --recode --recode-INFO-all --stdout | 
-#changes added
- bcftools filter --soft-filter LowQual \
- --exclude '%QUAL<20'
+ bcftools filter - \
+ --soft-filter LowQual \
+ --exclude '%QUAL<20' \
  --set-GTs 0 \
- --threads $numthreads -Oz \
- -o $outdir/tmp-variants_filtered.vcf.gz
-# bgzip -c > $outdir/tmp-variants_filtered.vcf.gz
-
-
-#index both vcfs
-tabix $outdir/tmp-invariants_filtered.vcf.gz
-tabix $outdir/tmp-variants_filtered.vcf.gz
-
-
-#concatenate the two vcfs and remove tmp files
-bcftools concat $outdir/tmp-invariants_filtered.vcf.gz \
- $outdir/tmp-variants_filtered.vcf.gz \
- --threads $numthreads --allow-overlaps -Oz \
- -o $outdir/filtered_consensus-ready.vcf.gz
-
-rm $outdir/tmp-invariants_filtered.vcf.gz*
-rm $outdir/tmp-variants_filtered.vcf.gz*
-
-
-#index final merged file
-tabix $outdir/filtered_consensus-ready.vcf.gz
-
+ --threads $numthreads \
+ -Ob -o $outdir/tmp-variants.filtered.bcf.gz
 
 
