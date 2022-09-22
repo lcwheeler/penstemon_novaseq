@@ -31,10 +31,7 @@ Invariant and variant sites are filtered differently, because we want stricter f
 
 ### Generate consensus sequence
 This script uses the reference genome in conjunction with the consensus VCF file to generate consensus sequences for each sample. The command `samtools faidx $referencegenome` will need to be run prior to the use of this script. This is an ARRAY script, meaning that to run, you will need to implement some form of `sbatch --array [0-n] scriptname.sh`, where n is the number of samples -1, and `scriptname.sh` is a generic name for the actual script being run.
-* See [`VCFcall_4a.ARRAY_generate_consensus_fullgenome.sh`]
-
-
-
+* See [`VCFcall_4a.ARRAY_generate_consensus_fullgenome.sh`](`VCFcall_4a.ARRAY_generate_consensus_fullgenome.sh`)
 
 
 
