@@ -20,7 +20,7 @@ do
 	#for each of the scaffolds, replace the name to match the species name
 	for j in scaffold*$species.fa;
 	do
-		sed -i "1s/^.*$/$species/g" $j;
+		sed -i "1s/^.*$/>$species/g" $j;
 	done
 	
 	#clean up

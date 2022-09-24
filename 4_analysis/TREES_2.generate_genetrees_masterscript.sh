@@ -17,7 +17,7 @@ source /home/bs66/.bash_profile
 
 
 #paths to important scripts and directories
-pythonscript="/work/bs66/dasanthera_novaseq/analysis/TREES_1a.create_fasta_window_alignments.py"
+pythonscript="/work/bs66/dasanthera_novaseq/analysis/TREES.create_fasta_window_alignments.py"
 scaffold_dir="/work/bs66/dasanthera_novaseq/consensus_alignments/scaffold_fullgenome_fastas"
 outdir="/work/bs66/dasanthera_novaseq/analysis/genetree_infiles"
 
@@ -30,6 +30,6 @@ scaflist=("1085" "1086" "1087" "2151" "2446" "2531" "2532" "2533" "2684" "2685" 
 #syntax: python3 scriptname input_fasta windowsize prefix
 for i in "${scaflist[@]}"
 do
-	python3 $pythonscript $scaffold_dir/allseqs_consensus_scaffold_$i.fa 10000 $outdir/scaffold_$i
+	python3 $pythonscript $scaffold_dir/allseqs_consensus_scaffold_$i.fa 10000 $outdir/scaf_$i/scaffold_$i
 done
 
