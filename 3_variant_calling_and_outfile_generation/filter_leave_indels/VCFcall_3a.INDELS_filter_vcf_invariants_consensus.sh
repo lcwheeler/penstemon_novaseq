@@ -3,7 +3,7 @@
 #SBATCH -N 1
 #SBATCH -n 16
 #SBATCH -p wessinger-48core
-#SBATCH --job-name=merge_vcf_consensus
+#SBATCH --job-name=filter_invariants
 
 
 cd $SLURM_SUBMIT_DIR
@@ -45,23 +45,18 @@ numthreads=16
 #VCF FILTERING#
 #####
 
-
-#index both vcfs
-tabix $outdir/tmp-invariants.filtered.bcf.gz
-tabix $outdir/tmp-variants.filtered.bcf.gz
+#We must filter variant and invariant sites separately -- applying the same filters to all sites would remove invariant sites because of the way they are coded in the file.
 
 
-#concatenate the two vcfs and remove tmp files
-bcftools concat $outdir/tmp-invariants.filtered.bcf.gz \
- $outdir/tmp-variants.filtered.bcf.gz \
- --threads $numthreads --allow-overlaps -Oz \
- -o $outdir/filtered_consensus_ready_no-indels.vcf.gz
+#only invariant sites.
+#max-maf 0 means no sites with minor allele frequency > 0.
+#we will not implement any filters here (but you could feasibly do min depth filters)
+#pipe into view because the compression is much faster than bgzip
+ vcftools --gzvcf $invcf \
+ --max-maf 0 \
+ --recode --recode-INFO-all --stdout | 
+ bcftools view - \
+ --threads $numthreads \
+ -Ob -o $outdir/tmp-invariants.filtered.bcf.gz
 
-#you could uncomment this to remove the tmp files, but I prefer to remove by hand, in case something goes wrong with the script.
-#rm $outdir/tmp-invariants.filtered.bcf.gz*
-#rm $outdir/tmp-variants.filtered.bcf.gz*
-
-
-#index final merged file
-tabix $outdir/filtered_consensus_ready_no-indels.vcf.gz
 

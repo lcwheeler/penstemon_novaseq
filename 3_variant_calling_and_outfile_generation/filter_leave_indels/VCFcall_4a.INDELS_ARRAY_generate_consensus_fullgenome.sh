@@ -5,7 +5,7 @@
 #SBATCH -p wessinger-48core
 #SBATCH --job-name=variants_bcftools
 
-###NOTE: this is set up as a batch array script. SLURM submit array code begins on line 47.
+###NOTE: this is set up as a batch array script. SLURM submit array code begins on line 46.
 
 
 cd $SLURM_SUBMIT_DIR
@@ -33,11 +33,11 @@ mapped_filtered_reads="/work/bs66/dasanthera_novaseq/mapped_filtered_bams"
 
 
 #Location of filtered vcf, from script #3 in this pipeline.
-invcf="/work/bs66/dasanthera_novaseq/GVCF_VCFs/filtered_consensus_ready_no-indels.vcf.gz"
+invcf="/work/bs66/dasanthera_novaseq/GVCF_VCFs/filtered_consensus_ready.vcf.gz"
 
 
 #path to the output directory for consensus sequence alignments. Make prior to running.
-outdir="/work/bs66/dasanthera_novaseq/consensus_alignments/individual_fullgenome_fastas"
+outdir="/work/bs66/dasanthera_novaseq/consensus_alignments"
 
 
 #number of cores used
@@ -78,6 +78,6 @@ samtools faidx $refgenome ${scaffoldnames[@]} |
  --missing "N" \
  --mark-del "-" \
  --sample $infile \
- $invcf > $outdir/consensus_fullgenome_$insample.fa
+ $invcf > $outdir/consensus_fullgenome_INDELS_$insample.fa
 
 

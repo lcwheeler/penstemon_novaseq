@@ -55,7 +55,7 @@ tabix $outdir/tmp-variants.filtered.bcf.gz
 bcftools concat $outdir/tmp-invariants.filtered.bcf.gz \
  $outdir/tmp-variants.filtered.bcf.gz \
  --threads $numthreads --allow-overlaps -Oz \
- -o $outdir/filtered_consensus_ready_no-indels.vcf.gz
+ -o $outdir/filtered_consensus_ready.vcf.gz
 
 #you could uncomment this to remove the tmp files, but I prefer to remove by hand, in case something goes wrong with the script.
 #rm $outdir/tmp-invariants.filtered.bcf.gz*
@@ -63,5 +63,5 @@ bcftools concat $outdir/tmp-invariants.filtered.bcf.gz \
 
 
 #index final merged file
-tabix $outdir/filtered_consensus_ready_no-indels.vcf.gz
+tabix $outdir/filtered_consensus_ready.vcf.gz
 

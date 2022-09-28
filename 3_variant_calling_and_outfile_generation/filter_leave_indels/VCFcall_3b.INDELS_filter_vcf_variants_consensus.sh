@@ -62,7 +62,6 @@ numthreads=16
 #BCFTOOLS
 # these commands soft filter variants with QUAL <20 and change GTs to reference sequence
 vcftools --gzvcf $invcf \
- --remove-indels \
  --min-alleles 2 \
  --minGQ 20 \
  --min-meanDP 3 \
