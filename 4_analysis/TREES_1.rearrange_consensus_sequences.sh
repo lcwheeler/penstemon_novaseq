@@ -6,7 +6,7 @@
 #list of scaffold names, or however naming scheme works
 scaflist=("1085" "1086" "1087" "2151" "2446" "2531" "2532" "2533" "2684" "2685" "2686" "2687")
 
-#bash for for loop to convert fasta consensus files into proper format for gene tree estimation
+#bash for loop to convert fasta consensus files into proper format for gene tree estimation
 for i in consensus*.fa;
 do
 	species=${i/.fa/}; species=${species/consensus_fullgenome_bws_/}
