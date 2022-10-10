@@ -52,24 +52,13 @@ bcftools mpileup --threads $numthreads -Ou \
  -a FORMAT/AD,FORMAT/DP \
  --min-BQ 20 \
  --min-MQ 20 \
- --gvcf 0,2 -f $refgenome ${bamlist[@]} | 
- bcftools call --threads $numthreads -m --gvcf 2 -Ou | 
+ -f $refgenome ${bamlist[@]} -Ou | 
+ bcftools call --threads $numthreads -m -Ou | 
  bcftools norm --threads $numthreads -f $refgenome \
- -Oz -o $outdir/unfiltered_gvcf_INDELS.gz
+ -Ob -o $outdir/unfiltered_INDELS.bcf.gz
 
 
 #index the gvcf
-tabix $outdir/unfiltered_gvcf_INDELS.gz
+tabix $outdir/unfiltered_INDELS.bcf.gz
 
-
-#convert from gvcf to a vcf (all sites, but invariants properly assessed)
-bcftools convert --gvcf2vcf \
- --fasta-ref $refgenome \
- --threads $numthreads \
- $outdir/unfiltered_gvcf.gz \
- -Oz -o $outdir/unfiltered_vcf_INDELS.gz
-
-
-#index the vcf
-tabix $outdir/unfiltered_vcf_INDELS.gz
 

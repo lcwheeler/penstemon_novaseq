@@ -28,7 +28,7 @@ module load vcftools
 
 
 #Location of unfiltered vcf, from script #2 in this pipeline.
-invcf="/work/bs66/dasanthera_novaseq/GVCF_VCFs/unfiltered_vcf.gz"
+invcf="/work/bs66/dasanthera_novaseq/GVCF_VCFs/unfiltered_INDELS.bcf.gz"
 
 
 #path to the output directory for vcfs and gvcfs. Should be made already.
@@ -61,7 +61,7 @@ numthreads=16
 
 #BCFTOOLS
 # these commands soft filter variants with QUAL <20 and change GTs to reference sequence
-vcftools --gzvcf $invcf \
+vcftools --bcf $invcf \
  --min-alleles 2 \
  --minGQ 20 \
  --min-meanDP 3 \
