@@ -35,3 +35,10 @@ This script uses the reference genome in conjunction with the consensus VCF file
 
 
 
+### Bonus: working with indels
+Scripts to perform variant calling and consensus sequence generation while including indels can be found in [`filter_leave_indels`](filter_leave_indels/).
+
+These are still a work in progress, because the consensus sequence method used here will not produce genome fasta files that are aligned to one another. On top of this, the indel detection method in bcftools doesn't appear to work super well; looking into alternative indel calling methods, but right now this is not a primary concern.
+
+
+
