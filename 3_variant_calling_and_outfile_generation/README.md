@@ -9,8 +9,8 @@ In this case, the .bed file produces genic regions, which we will use downstream
 
 
 
-### Call genotypes to produce a gVCF
-The gVCF includes variants in addition to invariant sites (which are called in contiguous haplotype blocks). After this script has concluded (and the successful creation of the unfiltered VCF) you can remove the gVCF.
+### Call genotypes to produce an "allsites" .vcf
+The VCF includes variants in addition to invariant sites (which are called in contiguous haplotype blocks).
 
 * see [`VCFcall_2.call_genotypes_mpileup.sh`](VCFcall_2.call_genotypes_mpileup.sh)
 * Currently filters on base quality <20 and mapping quality <20, and calls invariant sites in such a way that you can filter on read depth and other parameters for invariant sites if you choose.
@@ -38,7 +38,7 @@ This script uses the reference genome in conjunction with the consensus VCF file
 ### Bonus: working with indels
 Scripts to perform variant calling and consensus sequence generation while including indels can be found in [`include_indels`](include_indels/).
 
-These are still a work in progress, because the consensus sequence method used here will not produce genome fasta files that are aligned to one another. This appears to be a gap in existing available software: generating multiple-sequence alignments from VCFs which include indels. On top of this, the indel detection method in bcftools (and most reference-based indel calling methods) is limited to calling small insertions and deletions.
+These are still a work in progress, because the consensus sequence method used here will not produce genome fasta files that are aligned to one another. This appears to be a gap in existing available software: generating multiple-sequence alignments from VCFs which include indels. On top of this, the indel detection method in bcftools (and most reference-based indel calling methods) is limited to calling small insertions and deletions (and is also known to have biases).
 
 
 
