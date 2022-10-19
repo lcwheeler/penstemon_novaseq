@@ -28,11 +28,11 @@ module load vcftools
 
 
 #Location of unfiltered vcf, from script #2 in this pipeline.
-invcf="/work/bs66/dasanthera_novaseq/VCFs/unfiltered_vcf.gz"
+invcf="/work/bs66/dasanthera_novaseq/GVCF_VCFs/unfiltered_vcf.gz"
 
 
 #path to the output directory for vcfs and gvcfs. Should be made already.
-outdir="/work/bs66/dasanthera_novaseq/VCFs"
+outdir="/work/bs66/dasanthera_novaseq/GVCF_VCFs"
 
 
 #number of cores used converting from gvcf to vcf
@@ -47,13 +47,13 @@ numthreads=16
 
 
 #index both vcfs
-tabix $outdir/tmp-invariants.filtered.vcf.gz
-tabix $outdir/tmp-variants.filtered.vcf.gz
+tabix $outdir/tmp-invariants.filtered.bcf.gz
+tabix $outdir/tmp-variants.filtered.bcf.gz
 
 
 #concatenate the two vcfs and remove tmp files
-bcftools concat $outdir/tmp-invariants.filtered.vcf.gz \
- $outdir/tmp-variants.filtered.vcf.gz \
+bcftools concat $outdir/tmp-invariants.filtered.bcf.gz \
+ $outdir/tmp-variants.filtered.bcf.gz \
  --threads $numthreads --allow-overlaps -Oz \
  -o $outdir/filtered_consensus_ready_no-indels.vcf.gz
 

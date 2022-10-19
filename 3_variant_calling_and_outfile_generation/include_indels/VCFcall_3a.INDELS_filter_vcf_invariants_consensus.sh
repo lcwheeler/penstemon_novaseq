@@ -28,11 +28,11 @@ module load vcftools
 
 
 #Location of unfiltered vcf, from script #2 in this pipeline.
-invcf="/work/bs66/dasanthera_novaseq/GVCF_VCFs/unfiltered_INDELS.bcf.gz"
+invcf="/work/bs66/dasanthera_novaseq/VCFs/unfiltered_INDELS.vcf.gz"
 
 
 #path to the output directory for vcfs and gvcfs. Should be made already.
-outdir="/work/bs66/dasanthera_novaseq/GVCF_VCFs"
+outdir="/work/bs66/dasanthera_novaseq/VCFs"
 
 
 #number of cores used converting from gvcf to vcf
@@ -52,11 +52,11 @@ numthreads=16
 #max-maf 0 means no sites with minor allele frequency > 0.
 #we will not implement any filters here (but you could feasibly do min depth filters)
 #pipe into view because the compression is much faster than bgzip
- vcftools --bcf $invcf \
+ vcftools --gzvcf $invcf \
  --max-maf 0 \
  --recode --recode-INFO-all --stdout | 
  bcftools view - \
  --threads $numthreads \
- -Ob -o $outdir/tmp-invariants.filtered.bcf.gz
+ -Oz -o $outdir/tmp-invariants.filtered.vcf.gz
 
 

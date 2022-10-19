@@ -28,11 +28,11 @@ module load vcftools
 
 
 #Location of unfiltered vcf, from script #2 in this pipeline.
-invcf="/work/bs66/dasanthera_novaseq/GVCF_VCFs/unfiltered_vcf.gz"
+invcf="/work/bs66/dasanthera_novaseq/VCFs/unfiltered_vcf.gz"
 
 
 #path to the output directory for vcfs and gvcfs. Should be made already.
-outdir="/work/bs66/dasanthera_novaseq/GVCF_VCFs"
+outdir="/work/bs66/dasanthera_novaseq/VCFs"
 
 
 #number of cores used converting from gvcf to vcf
@@ -65,15 +65,15 @@ vcftools --gzvcf $invcf \
  --min-alleles 2 \
  --minGQ 20 \
  --min-meanDP 3 \
- --max-meanDP 40 \
+ --max-meanDP 60 \
  --minDP 2 \
- --max-missing 0.80 \
+ --max-missing 0.50 \
  --recode --recode-INFO-all --stdout | 
  bcftools filter - \
  --soft-filter LowQual \
  --exclude '%QUAL<20' \
  --set-GTs 0 \
  --threads $numthreads \
- -Ob -o $outdir/tmp-variants.filtered.bcf.gz
+ -Oz -o $outdir/tmp-variants.filtered.vcf.gz
 
 

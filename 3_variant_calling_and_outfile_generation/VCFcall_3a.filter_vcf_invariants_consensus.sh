@@ -28,11 +28,11 @@ module load vcftools
 
 
 #Location of unfiltered vcf, from script #2 in this pipeline.
-invcf="/work/bs66/dasanthera_novaseq/GVCF_VCFs/unfiltered_vcf.gz"
+invcf="/work/bs66/dasanthera_novaseq/VCFs/unfiltered_vcf.gz"
 
 
 #path to the output directory for vcfs and gvcfs. Should be made already.
-outdir="/work/bs66/dasanthera_novaseq/GVCF_VCFs"
+outdir="/work/bs66/dasanthera_novaseq/VCFs"
 
 
 #number of cores used converting from gvcf to vcf
@@ -57,6 +57,6 @@ numthreads=16
  --recode --recode-INFO-all --stdout | 
  bcftools view - \
  --threads $numthreads \
- -Ob -o $outdir/tmp-invariants.filtered.bcf.gz
+ -Oz -o $outdir/tmp-invariants.filtered.vcf.gz
 
 

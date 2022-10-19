@@ -28,7 +28,7 @@ module load vcftools
 
 
 #Location of unfiltered vcf, from script #2 in this pipeline.
-invcf="/work/bs66/dasanthera_novaseq/VCFs/unfiltered_vcf.gz"
+invcf="/work/bs66/dasanthera_novaseq/VCFs/unfiltered_INDELS.vcf.gz"
 
 
 #path to the output directory for vcfs and gvcfs. Should be made already.
@@ -60,7 +60,7 @@ numthreads=16
  -Oz -o $outdir/tmp-invariants.filtered.vcf.gz
 
 
-#only variant sites. filters on QUALITY, DEPTH, and MISSINGNESS of reads.
+#only variant sites. filters on QUALITY, DEPTH, and MISSIGNESS of reads.
 #note that exact parameter values should be thought out on analysis-by-analysis basis. This script is for filtering with the eventual goal of generating multiple sequence alignments (phylogenomics!). So, some of the population-genomic filters common at the vcf filtering stage are not helpful here (e.g., filtering on minor allele frequency, HWE proportions, etc.).
 
 #VCFTOOLS
@@ -98,7 +98,7 @@ tabix $outdir/tmp-variants.filtered.vcf.gz
 bcftools concat $outdir/tmp-invariants.filtered.vcf.gz \
  $outdir/tmp-variants.filtered.vcf.gz \
  --threads $numthreads --allow-overlaps -Oz \
- -o $outdir/filtered_consensus_ready.vcf.gz
+ -o $outdir/filtered_consensus_ready_INDELS.vcf.gz
 
 #you could uncomment this to remove the tmp files, but I prefer to remove by hand, in case something goes wrong with the script.
 #rm $outdir/tmp-invariants.filtered.bcf.gz*
@@ -106,4 +106,5 @@ bcftools concat $outdir/tmp-invariants.filtered.vcf.gz \
 
 
 #index final merged file
-tabix $outdir/filtered_consensus_ready.vcf.gz
+tabix $outdir/filtered_consensus_ready_INDELS.vcf.gz
+

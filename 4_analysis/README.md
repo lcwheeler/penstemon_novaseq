@@ -52,7 +52,7 @@ done
 cat --number tmpout.txt > numbered_treepaths.txt
 rm tmpout.txt
 ```
-* See Astral species tree script
+* Estimate the species tree in Astral. See [`SPECIESTREE_1.astral_windowtrees.sh`](SPECIESTREE_1.astral_windowtrees.sh)
 
 
 

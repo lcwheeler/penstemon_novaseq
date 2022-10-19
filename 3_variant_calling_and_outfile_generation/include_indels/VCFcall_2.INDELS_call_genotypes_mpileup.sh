@@ -30,7 +30,7 @@ mapped_filtered_reads="/work/bs66/dasanthera_novaseq/mapped_filtered_bams"
 
 
 #path to the output directory for vcf files (called variants). Make prior to running
-outdir="/work/bs66/dasanthera_novaseq/GVCF_VCFs"
+outdir="/work/bs66/dasanthera_novaseq/VCFs"
 
 
 #number of cores used for mpileup and call
@@ -55,10 +55,10 @@ bcftools mpileup --threads $numthreads -Ou \
  -f $refgenome ${bamlist[@]} -Ou | 
  bcftools call --threads $numthreads -m -Ou | 
  bcftools norm --threads $numthreads -f $refgenome \
- -Ob -o $outdir/unfiltered_INDELS.bcf.gz
+ -Oz -o $outdir/unfiltered_INDELS.vcf.gz
 
 
 #index the gvcf
-tabix $outdir/unfiltered_INDELS.bcf.gz
+tabix $outdir/unfiltered_INDELS.vcf.gz
 
 

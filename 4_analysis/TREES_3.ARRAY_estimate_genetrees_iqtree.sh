@@ -30,13 +30,14 @@ cd $inscaf
 #for loop to go through each alignment, estimate subs. model, and est. tree
 #Maybe there is better way but I can't figure out other than for loop
 #the ARRAY number changes the scaffold for which this occurs
+#"rooting" at P. montanus, but this is still an unrooted tree
 for i in *.fa
 do
 	iqtree -s $i \
 	 --seqtype DNA \
 	 -m MFP \
 	 -o mon_61-7_S440 \
-	 -nt 4 \
+	 -T 4 \
 	 --prefix outfile_$i
 done
 
