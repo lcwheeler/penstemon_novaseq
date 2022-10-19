@@ -29,10 +29,10 @@ inscaf="${scaflist[$SLURM_ARRAY_TASK_ID]}"
 
 #run for loop for python script to generate gene tree files for each scaffold
 #syntax: python3 scriptname input_fasta windowsize prefix
-python3 $pythonscript $scaffold_dir/allseqs_consensus_scaffold_$inscaf.fa 10000 $outdir/scaf_$inscaf/scaffold_$inscaf
+python3 $pythonscript $scaffold_dir/allseqs_consensus_scaffold_$inscaf.fa 10000 0.75 $outdir/scaf_$inscaf/scaffold_$inscaf
 
 #for i in "${scaflist[@]}"
 #do
-#	python3 $pythonscript $scaffold_dir/allseqs_consensus_scaffold_$i.fa 10000 $outdir/scaf_$i/scaffold_$i
+#	python3 $pythonscript $scaffold_dir/allseqs_consensus_scaffold_$i.fa 10000 0.75 $outdir/scaf_$i/scaffold_$i
 #done
 

@@ -19,9 +19,10 @@ The fasta files generated from consensus have newlines every 50bp. Additionally,
 ##### Generate gene tree input files
 This is done in two parts, with three files:
 1. Make output directories for each scaffold. 
-2. Generate gene trees with [`TREES_2.ARRAY_generate_genetree_infiles_masterscript.sh`](TREES_2.ARRAY_generate_genetree_infiles_masterscript.sh), which uses the custom python script [`TREES.create_fasta_window_alignments.py`](TREES.create_fasta_window_alignments.py). The missing data threshold is set in the python script; otherwise, it should function without modification. Parameters are defined in the batch script, including:
+2. Generate gene trees with [`TREES_2.ARRAY_generate_genetree_infiles_masterscript.sh`](TREES_2.ARRAY_generate_genetree_infiles_masterscript.sh), which uses the custom python script [`TREES.create_fasta_window_alignments.py`](TREES.create_fasta_window_alignments.py). This should function without modification. Parameters are defined in the batch script, including:
 	* Input fasta file
 	* Window size
+	* Missing data threshold (only generates windows in which all species pass missing data threshold)
 	* prefix to append to outfiles (can function as outdir)
 
 ##### Estimate gene trees

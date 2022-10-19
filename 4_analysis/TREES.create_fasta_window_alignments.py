@@ -8,8 +8,9 @@ import os
 #3. the prefix to append to the output files
 input_file = sys.argv[1]
 windowsize = int(sys.argv[2])
-prefix = sys.argv[3]
-missingthresh = 0.80 #any window with an individual with this proportion of missing data or higher will be removed
+missingthresh = float(sys.argv[3]) #any window with an individual with this proportion of missing data or higher will be removed
+prefix = sys.argv[4]
+
 
 
 #generate info about alignment and number of cycles needed
