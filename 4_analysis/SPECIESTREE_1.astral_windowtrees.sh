@@ -4,6 +4,7 @@
 #SBATCH -n 1
 #SBATCH -p wessinger-48core
 #SBATCH --job-name=astral_tree
+#SBATCH --output=slurm-astral-windowtree.out
 
 
 cd $SLURM_SUBMIT_DIR
