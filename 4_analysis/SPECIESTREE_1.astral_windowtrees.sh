@@ -22,9 +22,5 @@ outpath="/work/bs66/dasanthera_novaseq/analysis/astral_trees"
 #run astral. Using single ML estimates of gene trees rather than bootstrap resampling.
 #wants unrooted gene trees (which ours are -- the "rooting" in IQtree is just for visualization, and they are not rooted in the treefile)
 #the branch annotations are for full annotations
-java -jar $astral \
- --input $treefile 
- --outgroup mon_61-7_S440 \
- --branch-annotate 2 \
- --output $outpath/astral_out.tre
+java -jar $astral --input $treefile --branch-annotate 2 --output $outpath/astral_out.tre
 
