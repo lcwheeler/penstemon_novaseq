@@ -10,7 +10,7 @@ In this case, the .bed file produces genic regions, which we will use downstream
 
 
 ### Call genotypes to produce an "allsites" .vcf
-The VCF includes variants in addition to invariant sites (which are called in contiguous haplotype blocks).
+The VCF includes variants in addition to invariant sites.
 
 * see [`VCFcall_2.call_genotypes_mpileup.sh`](VCFcall_2.call_genotypes_mpileup.sh)
 * Currently filters on base quality <20 and mapping quality <20, and calls invariant sites in such a way that you can filter on read depth and other parameters for invariant sites if you choose.

@@ -4,6 +4,7 @@
 #SBATCH -n 16
 #SBATCH -p wessinger-48core
 #SBATCH --job-name=concat_tree
+#SBATCH --output=iqtree_speciestree_%j.out
 
 
 cd $SLURM_SUBMIT_DIR

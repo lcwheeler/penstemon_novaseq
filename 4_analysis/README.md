@@ -39,7 +39,7 @@ This pipeline uses [IQtree](http://www.iqtree.org/) for gene tree inference. Aga
 cd /work/bs66/dasanthera_novaseq/analysis/genetree_outfiles
 for i in scaf_*;
 do
-    cat $i/*.treefile >> combined_windowtrees.tre
+    cat $i/*.treefile >> combined_10kbwindowtrees.tre
 done
 ```
 
@@ -50,7 +50,7 @@ do
     echo $i/*.treefile | tr " " "\n" >> tmpout.txt
 done
 
-cat --number tmpout.txt > numbered_treepaths.txt
+cat --number tmpout.txt > numbered_10kbtreepaths.txt
 rm tmpout.txt
 ```
 * Estimate the species tree in Astral. See [`SPECIESTREE_1.astral_windowtrees.sh`](SPECIESTREE_1.astral_windowtrees.sh)
