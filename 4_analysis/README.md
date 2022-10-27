@@ -53,9 +53,39 @@ done
 cat --number tmpout.txt > numbered_10kbtreepaths.txt
 rm tmpout.txt
 ```
+
+I put both of these outputs in a new directory, treemetrics. They will be used for several downstream analyses.
+
+
 * Estimate the species tree in Astral. See [`SPECIESTREE_1.astral_windowtrees.sh`](SPECIESTREE_1.astral_windowtrees.sh)
 
 
+#### Tree metrics
+##### Robinson-Foulds distance
+Using the conda install version of ete3 here. I am having trouble getting this to work through batch submission, so used an interactive node instead.
 
+```
+idev
+
+#source appropriate environments to enable use of conda installs through batch submission
+source /home/bs66/.bashrc
+source /home/bs66/.bash_profile
+
+
+#activate conda environment with packages installed
+#need ete3 installed
+conda activate quibl_etc
+
+
+#specify reference (species) tree, and the combined window tree file
+#reference tree should not have annotations so I made a new, cleaned up treefile
+reftree="/work/bs66/dasanthera_novaseq/analysis/astral_trees/astral_10kb_noannotations.tre"
+treelist="/work/bs66/dasanthera_novaseq/analysis/treemetrics/combined_10kbwindowtrees.tre"
+outdir="/work/bs66/dasanthera_novaseq/analysis/treemetrics"
+
+
+#run ete3
+ete3 compare --src_tree_list $treelist -r $reftree --unrooted --taboutput > $outdir/RFdistance_10kbwindow_astralref.txt
+```
 
 

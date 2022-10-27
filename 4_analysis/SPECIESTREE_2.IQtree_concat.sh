@@ -14,7 +14,7 @@ source /home/bs66/.bashrc
 source /home/bs66/.bash_profile
 conda activate mapping_etc
 
-#path to ASTRAL
+#path to scaffold fasta alignments
 scaffolds="/work/bs66/dasanthera_novaseq/consensus_alignments/scaffold_fullgenome_fastas"
 
 
@@ -25,7 +25,7 @@ outpath="/work/bs66/dasanthera_novaseq/analysis/iqtree_speciestree"
 
 #infer species tree in IQtree
 iqtree -p $scaffolds \
- -m MFP \
+ -m GTR+I+R \
  -o mon_61-7_S440 \
  -T 16 \
  -B 1000 \

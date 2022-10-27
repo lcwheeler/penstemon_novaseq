@@ -13,7 +13,7 @@ cd $SLURM_SUBMIT_DIR
 astral="/work/bs66/software/ASTRAL/Astral/astral.5.7.8.jar"
 
 #path to window trees, catted into combined treefile
-treefile="/work/bs66/dasanthera_novaseq/analysis/astral_trees/combined_10kbwindowtrees.tre"
+treefile="/work/bs66/dasanthera_novaseq/analysis/treemetrics/combined_10kbwindowtrees.tre"
 
 #path to output file
 outpath="/work/bs66/dasanthera_novaseq/analysis/astral_trees"

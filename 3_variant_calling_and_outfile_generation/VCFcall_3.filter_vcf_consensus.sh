@@ -77,9 +77,9 @@ vcftools --gzvcf $invcf \
  --min-alleles 2 \
  --minGQ 20 \
  --min-meanDP 3 \
- --max-meanDP 40 \
+ --max-meanDP 60 \
  --minDP 2 \
- --max-missing 0.80 \
+ --max-missing 0.50 \
  --recode --recode-INFO-all --stdout | 
  bcftools filter - \
  --soft-filter LowQual \
