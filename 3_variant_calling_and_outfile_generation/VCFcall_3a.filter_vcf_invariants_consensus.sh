@@ -5,6 +5,7 @@
 #SBATCH -p wessinger-48core
 #SBATCH --job-name=filter_invariants
 
+##NOTE: You can either run 3a, b, and c, or just 3. VCFcall_3 is redundant with a, b, and c; it runs more slowly, but requires fewer job submissions.
 
 cd $SLURM_SUBMIT_DIR
 

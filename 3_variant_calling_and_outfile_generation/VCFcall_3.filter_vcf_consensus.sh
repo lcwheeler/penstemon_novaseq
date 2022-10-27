@@ -6,6 +6,8 @@
 #SBATCH --job-name=create_consensus_vcf_pipeline
 
 
+##NOTE: You can either run this script, or run 3a, b, and c. 3a, b, and c are redundant with this script, but run more quickly.
+
 cd $SLURM_SUBMIT_DIR
 
 
