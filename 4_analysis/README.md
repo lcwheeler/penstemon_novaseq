@@ -9,17 +9,20 @@
 ### Trees
 
 #### Prepare fasta files for gene tree inference
-The fasta files generated from consensus have newlines every 50bp. Additionally, they are sorted by species. We want to have a fasta file for each scaffold, with the sequence for that scaffold from each species. There is a script, [`TREES_1.rearrange_consensus_sequences.sh`](TREES_1.rearrange_consensus_sequences.sh), which does this. Note that this functions on Linux OS, and will need modified slightly if using on MacOS (read script for more details). Script will need edited to match variable naming scheme. Use:
+The fasta files generated from consensus have newlines every 50bp. Additionally, they are sorted by species. We want to have a fasta file for each scaffold, with the sequence for that scaffold from each species. There is a script, [`TREES_1.rearrange_consensus_sequences.sh`](genetrees/TREES_1.rearrange_consensus_sequences.sh), which does this. Note that this functions on Linux OS, and will need modified slightly if using on MacOS (read script for more details). Script will need edited to match variable naming scheme. Use:
 
 `bash TREES_1.rearrange_consensus_sequences.sh`
 
+
+#### Prepare CDS fasta files for gene tree inference
+The fasta files generated for CDS regions are initially sorted by sample. To estimate CDS gene trees, we need a fasta for each CDS, with each sample's sequence included. To generate these, see [`CDS_TREES.concat_CDS_fastas.py`](genetrees/CDS_TREES.concat_CDS_fastas.py). This python script takes input fasta, output directory, and missing data threshold, and appends to an output fasta for each CDS, naming the output after the scaffold and region the CDS corresponds to. A simple shell for loop can be run with the python script to add all samples to the output. The missing data threshold here filters for individuals, rather than windows (i.e., if a sample has more missing data than desired, that individual is not added to the output fasta, rather than the output fasta not being generated).
 
 
 #### ASTRAL species tree
 ##### Generate gene tree input files
 This is done in two parts, with three files:
 1. Make output directories for each scaffold. 
-2. Generate gene trees with [`TREES_2.ARRAY_generate_genetree_infiles_masterscript.sh`](TREES_2.ARRAY_generate_genetree_infiles_masterscript.sh), which uses the custom python script [`TREES.create_fasta_window_alignments.py`](TREES.create_fasta_window_alignments.py). This should function without modification. Parameters are defined in the batch script, including:
+2. Generate gene trees with [`TREES_2.ARRAY_generate_genetree_infiles_masterscript.sh`](genetrees/TREES_2.ARRAY_generate_genetree_infiles_masterscript.sh), which uses the custom python script [`TREES.create_fasta_window_alignments.py`](TREES.create_fasta_window_alignments.py). This should function without modification. Parameters are defined in the batch script, including:
 	* Input fasta file
 	* Window size
 	* Missing data threshold (only generates windows in which all species pass missing data threshold)
@@ -29,7 +32,7 @@ This is done in two parts, with three files:
 This pipeline uses [IQtree](http://www.iqtree.org/) for gene tree inference. Again, this is done in two parts: 
 1. Make output directories for gene trees estimated along each scaffold.
 2. Estimate gene trees (in array batch submission), setting outgroup (here it is P. montanus), and specifying substitution model inference and out prefix.
-* See [`TREES_3.ARRAY_estimate_genetrees_iqtree.sh`](TREES_3.ARRAY_estimate_genetrees_iqtree.sh)
+* See [`TREES_3.ARRAY_estimate_genetrees_iqtree.sh`](genetrees/TREES_3.ARRAY_estimate_genetrees_iqtree.sh)
 
 
 ##### Estimate species tree in ASTRAL

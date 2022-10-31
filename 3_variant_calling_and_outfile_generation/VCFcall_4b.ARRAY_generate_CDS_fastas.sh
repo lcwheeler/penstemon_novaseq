@@ -4,7 +4,7 @@
 #SBATCH -n 1
 #SBATCH -p defq
 #SBATCH --job-name=pullCDS
-#SBATCH --output=slurm-generate-CDS-fasta.out
+#SBATCH --output=slurm-generate-CDS-fasta_%j.out
 
 
 #This is an arrayed batch script, requiring special syntax to submit. The info needed to determine array number begins on line 27. Submit with sbatch --array [0-n-1], where n is the number of consensus genome fastas in your input directory (genomedir). For me this is sbatch --array [0-17]
