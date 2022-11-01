@@ -18,7 +18,7 @@ module load bedtools
 
 #path to CDS.bed file from the annotation, and desired outfile
 bedfile="/work/bs66/project_compare_genomes/annot_Pdavidsonii_gffread.genes.bed"
-outdir="/work/bs66/dasanthera_novaseq/consensus_alignments/CDS_fastas"
+outdir="/work/bs66/dasanthera_novaseq/consensus_alignments/individual_CDS_fastas"
 
 
 #path to directory with genomes (fasta format) for each sample
