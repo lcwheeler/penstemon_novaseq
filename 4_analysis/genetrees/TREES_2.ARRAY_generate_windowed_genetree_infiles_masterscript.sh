@@ -12,7 +12,7 @@
 cd $SLURM_SUBMIT_DIR
 
 
-#source bash profile and activate conda environment with pixy installed
+#source bash profile and activate conda environment with python3 as base python env
 source /home/bs66/.bashrc
 source /home/bs66/.bash_profile
 

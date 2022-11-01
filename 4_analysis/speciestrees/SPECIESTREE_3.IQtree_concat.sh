@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #SBATCH -N 1
-#SBATCH -n 16
+#SBATCH -n 32
 #SBATCH -p wessinger-48core
 #SBATCH --job-name=concat_tree
 #SBATCH --output=iqtree_speciestree_%j.out
@@ -27,7 +27,7 @@ outpath="/work/bs66/dasanthera_novaseq/analysis/iqtree_speciestree"
 iqtree -p $scaffolds \
  -m GTR+I+R \
  -o mon_61-7_S440 \
- -T 16 \
+ -T 32 \
  -B 1000 \
  --prefix $outpath/concat_speciestree_scaffolds
 
