@@ -16,15 +16,16 @@ source /home/bs66/.bash_profile
 conda activate QC
 
 
-################
-#fastqc+multiqc#
-################
-
+#Change these: location of raw reads and location of the output directory
+#(will need to make output directory)
 rawreads="/work/bs66/dasanthera_novaseq/raw_reads"
 
 fastqc_outdir_rawreads="/work/bs66/dasanthera_novaseq/fastqc_rawreads"
-rm -r $fastqc_outdir_rawreads
-mkdir $fastqc_outdir_rawreads
+
+
+################
+#fastqc+multiqc#
+################
 
 #move to directory with reads (raw reads directory)
 cd $rawreads
