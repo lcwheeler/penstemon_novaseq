@@ -35,6 +35,10 @@ This pipeline uses [IQtree](http://www.iqtree.org/) for gene tree inference. Aga
 
 #### CDS gene trees
 
+# NOTE!!! This is currently incorrectly pulling "CDS". The bedtools getfasta command is pulling the entire gene, rather than just the CDS. Updates incoming, but the new scripts will use syntax like this to create the CDS for individual samples:
+`gffread -x out.fasta -g $genomefile $annotation`
+
+
 ##### Prepare CDS fasta files for gene tree inference
 The fasta files generated for CDS regions are initially sorted by sample. To estimate CDS gene trees, we need a fasta for each CDS, with each sample's sequence included. To generate these, see [`CDS_TREES.concat_CDS_fastas.py`](genetrees/CDS_TREES.concat_CDS_fastas.py). This python script takes input fasta, output directory, and missing data threshold, and appends to an output fasta for each CDS, naming the output after the scaffold and region the CDS corresponds to. A simple shell for loop can be run with the python script to add all samples to the output. The missing data threshold here filters for individuals, rather than windows (i.e., if a sample has more missing data than desired, that individual is not added to the output fasta, rather than the output fasta not being generated).
 
