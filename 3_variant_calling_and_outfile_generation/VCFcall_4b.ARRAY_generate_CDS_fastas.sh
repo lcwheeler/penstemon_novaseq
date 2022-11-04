@@ -2,22 +2,28 @@
 
 #SBATCH -N 1
 #SBATCH -n 1
-#SBATCH -p defq
+#SBATCH -p wessinger-48core
 #SBATCH --job-name=pullCDS
 #SBATCH --output=slurm-generate-CDS-fasta_%j.out
 
 
-#This is an arrayed batch script, requiring special syntax to submit. The info needed to determine array number begins on line 27. Submit with sbatch --array [0-n-1], where n is the number of consensus genome fastas in your input directory (genomedir). For me this is sbatch --array [0-17]
+#This is an arrayed batch script, requiring special syntax to submit. Submit with sbatch --array [0-n-1], where n is the number of consensus genome fastas in your input directory (genomedir). For me this is sbatch --array [0-17]
 
 
 cd $SLURM_SUBMIT_DIR
 
-#load bedtools
-module load bedtools
+#source appropriate environments to enable use of conda installs through batch submission
+source /home/bs66/.bashrc
+source /home/bs66/.bash_profile
+
+
+#activate conda environment with gffread installed
+conda activate mapping_etc
+
 
 
 #path to CDS.bed file from the annotation, and desired outfile
-bedfile="/work/bs66/project_compare_genomes/annot_Pdavidsonii_gffread.genes.bed"
+bedfile="/work/bs66/project_compare_genomes/annot_Pdavidsonii_1mb.gffread.genes.bed"
 outdir="/work/bs66/dasanthera_novaseq/consensus_alignments/individual_CDS_fastas"
 
 
@@ -33,6 +39,7 @@ samplename="${samplename/consensus_fullgenome_/}"
 
 
 
-#bedtools command to extract CDS for all mapped individuals
-bedtools getfasta -fi $infile -bed $bedfile -fo $outdir/CDS_$samplename
+#gffread command to extract CDS for all mapped individuals
+gffread -x $outdir/CDS_$samplename -C -M -K -Y -E --sort-alpha -g $infile $bedfile
+
 

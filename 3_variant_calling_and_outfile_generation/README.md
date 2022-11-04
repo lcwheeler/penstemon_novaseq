@@ -35,9 +35,13 @@ First we generate consensus genome sequences. This script uses the reference gen
 <br />
 
 Next, we will make use of the file generated in step 1 to pull CDS from the fastas. This only functions correctly if consensus fastas are aligned perfectly to the reference fasta (NO INDELS); it just pulls the same CDS regions that were annotated in the reference, based on position.
+
+First, I need to filter my .bed file to contain only scaffolds that are actually in the genomes. This may not be a necessary step depending on which genome and species you are using. I made a file named "scaflist.txt" which contained the names of each scaffold I wanted to retain, one name per line. Then, I filtered with grep:
+`grep -f scaflist.txt annot_Pdavidsonii_gffread.genes.bed > annot_Pdavidsonii_1mb.gffread.genes.bed`
+
+Then, use this newly created filtered .bed file to generate CDS sequences for each sample.
 * See [`VCFcall_4b.ARRAY_generate_CDS_fastas.sh`](VCFcall_4b.ARRAY_generate_CDS_fastas.sh)
 
-### 
 
 
 
