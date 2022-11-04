@@ -36,7 +36,18 @@ This pipeline uses [IQtree](http://www.iqtree.org/) for gene tree inference. Aga
 #### CDS gene trees
 
 ##### Prepare CDS fasta files for gene tree inference
-The fasta files generated for CDS regions are initially sorted by sample. To estimate CDS gene trees, we need a fasta for each CDS, with each sample's sequence included. To generate these, see [`CDS_TREES.concat_CDS_fastas.py`](genetrees/CDS_TREES.concat_CDS_fastas.py). This python script takes input fasta, output directory, and missing data threshold, and appends to an output fasta for each CDS, naming the output after the scaffold and region the CDS corresponds to. A simple shell for loop can be run with the python script to add all samples to the output. The missing data threshold here filters for individuals, rather than windows (i.e., if a sample has more missing data than desired, that individual is not added to the output fasta, rather than the output fasta not being generated).
+The fasta files generated for CDS regions are initially sorted by sample. To estimate CDS gene trees, we need a fasta for each CDS, with each sample's sequence included. First we will want to reformat our fasta files, so they are single line fasta rather than interleaved. Use this code on the CDS fastas.
+```shell
+
+for i in *.fa;
+do
+    awk '/^>/ { if(NR>1) print "";  printf("%s\n",$0); next; } { printf("%s",$0);}  END {printf("\n");}' < $i > "${i/.fa/.fixed.fa}"
+    rm $i
+done
+
+```
+
+Next, we will want to generate the infiles for gene tree inference. To generate these, see [`CDS_TREES.concat_CDS_fastas.py`](genetrees/CDS_TREES.concat_CDS_fastas.py). This python script takes input fasta, output directory, and missing data threshold, and appends to an output fasta for each CDS, naming the output after the scaffold and region the CDS corresponds to. A simple shell for loop can be run with the python script to add all samples to the output. The missing data threshold here filters for individuals, rather than windows (i.e., if a sample has more missing data than desired, that individual is not added to the output fasta, rather than the output fasta not being generated).
 
 ```shell
 for i in individual_CDS_fastas/CDS_*.fa;
@@ -45,33 +56,12 @@ do
 done
 ```
 
-
 Here I generate aligned fasta for each CDS, excluding individuals with > 50% missing data. The script is fast, and possible to use without batch submission. But for many samples or many CDS regions, it would be wise to write a batch script so as not to overload the head node.
 
 
 ##### Estimate CDS gene trees
-Still using IQtree for gene tree inference here. This is done in two parts:
-1. In the `CDS_genetree_infiles` directory, make subdirectories for each scaffold, and move appropriate files there. E.g.,
-
-```shell
-mkdir scaf_1085; mv scaffold_1085* scaf_1085
-mkdir scaf_1087; mv scaffold_1087* scaf_1087
-mkdir scaf_2446; mv scaffold_2446* scaf_2446
-mkdir scaf_2532; mv scaffold_2532* scaf_2532
-mkdir scaf_2684; mv scaffold_2684* scaf_2684
-mkdir scaf_2686; mv scaffold_2686* scaf_2686
-mkdir scaf_1086; mv scaffold_1086* scaf_1086
-mkdir scaf_2151; mv scaffold_2151* scaf_2151
-mkdir scaf_2531; mv scaffold_2531* scaf_2531
-mkdir scaf_2533; mv scaffold_2533* scaf_2533
-mkdir scaf_2685; mv scaffold_2685* scaf_2685
-mkdir scaf_2687; mv scaffold_2687* scaf_2687
-```
-
-
-Do the same for the desired output directory.
-2. Estimate gene trees in array batch submission. Do not set outgroup, as not all taxa are guaranteed to be present in each CDS.
-* See [`CDS_TREES_1.ARRAY_estimate_CDS_genetrees_iqtree.sh`](genetrees/CDS_TREES_1.ARRAY_estimate_CDS_genetrees_iqtree.sh)
+Still using IQtree for gene tree inference here. This used to be done on a scaffold-by-scaffold basis, but because that information has been lost in the header, instead we are just submitting all files for inference. They could be split up into sections to speed this part up.
+* To infer gene trees, see [`CDS_TREES_1.estimate_CDS_genetrees_iqtree.sh`](genetrees/CDS_TREES_1.estimate_CDS_genetrees_iqtree.sh)
 
 
 
