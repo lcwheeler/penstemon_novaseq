@@ -102,14 +102,14 @@ Perform the same commands as described for the windowed analysis; cat trees to a
 
 ```shell
 cd /work/bs66/dasanthera_novaseq/analysis/CDS_genetree_outfiles
-for i in scaf_*;
+for i in *.treefile;
 do
-    cat $i/*.treefile >> combined_CDStrees.tre
+    cat $i >> combined_CDStrees.tre
 done
 
-for i in scaf_*;
+for i in *.treefile;
 do
-    echo $i/*.treefile | tr " " "\n" >> tmpout.txt
+    echo $i | tr " " "\n" >> tmpout.txt
 done
 
 cat --number tmpout.txt > numbered_CDStreepaths.txt
