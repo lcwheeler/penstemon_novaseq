@@ -64,3 +64,9 @@ rm tmpout.txt
 * Use stat_tree output to identify which specific gene trees support GDF 1, and match those trees to the numbered_treepaths output to identify specific discordant gene trees of interest.
     * Identified 105 discordant trees.
     * See script: `ID_discordant_trees.py` and output: `discordant_trees.txt`
+
+
+
+## D-statistics and related metrics
+* Using Dsuite to calculate various metrics related to introgression
+* Using an input tree to additionally test for significance of D with respect to tree topology. Tree for input here is the MLE tree for concatenated species tree, rooted with P. montanus and P. lyallii as outgroups (same as sliding windows 10kb astral tree)
