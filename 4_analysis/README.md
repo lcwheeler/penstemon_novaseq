@@ -159,32 +159,19 @@ ete3 compare --src_tree_list $treelist -r $reftree --unrooted --taboutput > $out
 ```
 
 
-## D-statistics and related metrics
+### D-statistics and related metrics
 * Using Dsuite to calculate various metrics related to introgression
-* Using an input tree to additionally test for significance of D with respect to tree topology. Tree for input here is the MLE tree for concatenated species tree, rooted with P. montanus and P. lyallii as outgroups (same as sliding windows 10kb astral tree)
-
-To do: 
-1. Use the tutorial on Dsuite
-2. Find which populations have highest D statistics (and are interesting)
-3. Assess whether this differs at different chromosomes
-4. Assess whether this differs ALONG different chromosomes (Dinvestigate)
-
-***
-NEED TO REDO, starting from beginning, with Lyallii also listed as outgroup
-Or something -- maybe not having lyallii at all is also fine.
+* Using an input tree to additionally test for significance of D with respect to tree topology. Tree for input here is the MLE tree for concatenated species tree, rooted with P. montanus. P. lyalli has been removed from the tree, since we only need one outgroup and it complicates things slightly to keep it.
 
 
-To generate plots for D and f-ratio:
-```
-for i in dtrios_output/d_trees/*.txt;
-do
-    scafname="${i##*/}";scafname="${scafname/_tree.txt/}"
-    ruby plot_d.rb $i plot_order.txt 0.3 $scafname.0.3.svg
-done
+First. perform Dsuite dtrios to generate D statistics for all possible triplets. Include tree topology to generate tree.txt files, which are D metrics with triplets arranged as they are in the tree. This is done on a scaffold-by-scaffold basis.
+* See [`DSTATS_1.ARRAY_dsuite_dtrios.sh`](Dstats/DSTATS_1.ARRAY_dsuite_dtrios.sh)
 
-for i in dtrios_output/d_trees/*.txt;
-do
-    scafname="${i##*/}";scafname="${scafname/_tree.txt/}"
-    ruby plot_f4ratio.rb $i plot_order.txt 0.3 f-ratio.$scafname.0.3.svg
-done
-```
+Next, combine Dtrios output for each scaffold into a genome-wide analysis. These first two scripts will also generate plots of significant f-branch results.
+* See [`DSTATS_2.combineDtrios.sh`](Dstats/DSTATS_2.combineDtrios.sh). Will also need [`intree_NOLYALLII_dtrios.tre`](Dstats/intree_NOLYALLII_dtrios.tre) and [`popset_dtrios.txt`](Dstats/popset_dtrios.txt)
+
+Finally, investigate targeted triplets of interest for sliding window introgression metrics.
+* For conducting this analysis, see [`DSTATS_3.dsuite_Dinvestigate.sh`](Dstats/DSTATS_3.dsuite_Dinvestigate.sh). Will also need [`popset_dtrios.txt`](Dstats/popset_dtrios.txt)
+* For plotting output of this analysis, see [`plot_Dinvestigate.R`](Dstats/plot_Dinvestigate.R)
+
+
