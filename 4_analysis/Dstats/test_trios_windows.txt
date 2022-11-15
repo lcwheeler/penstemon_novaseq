@@ -1,0 +1,13 @@
+rup_98	new_75	dav_87
+rup_98	new_75	dav_117
+rup_98	new_80	dav_87
+rup_98	new_80	dav_117
+car_91	new_75	rup_86
+car_91	new_80	rup_86
+car_91	new_85	rup_86
+car_91	new_75	rup_98
+car_91	new_80	rup_98
+dav_118	dav_116	rup_98
+dav_118	dav_116	rup_105
+dav_118	fru_106	rup_101
+dav_118	fru_106	car_28

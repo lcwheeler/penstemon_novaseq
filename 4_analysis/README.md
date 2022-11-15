@@ -159,3 +159,32 @@ ete3 compare --src_tree_list $treelist -r $reftree --unrooted --taboutput > $out
 ```
 
 
+## D-statistics and related metrics
+* Using Dsuite to calculate various metrics related to introgression
+* Using an input tree to additionally test for significance of D with respect to tree topology. Tree for input here is the MLE tree for concatenated species tree, rooted with P. montanus and P. lyallii as outgroups (same as sliding windows 10kb astral tree)
+
+To do: 
+1. Use the tutorial on Dsuite
+2. Find which populations have highest D statistics (and are interesting)
+3. Assess whether this differs at different chromosomes
+4. Assess whether this differs ALONG different chromosomes (Dinvestigate)
+
+***
+NEED TO REDO, starting from beginning, with Lyallii also listed as outgroup
+Or something -- maybe not having lyallii at all is also fine.
+
+
+To generate plots for D and f-ratio:
+```
+for i in dtrios_output/d_trees/*.txt;
+do
+    scafname="${i##*/}";scafname="${scafname/_tree.txt/}"
+    ruby plot_d.rb $i plot_order.txt 0.3 $scafname.0.3.svg
+done
+
+for i in dtrios_output/d_trees/*.txt;
+do
+    scafname="${i##*/}";scafname="${scafname/_tree.txt/}"
+    ruby plot_f4ratio.rb $i plot_order.txt 0.3 f-ratio.$scafname.0.3.svg
+done
+```

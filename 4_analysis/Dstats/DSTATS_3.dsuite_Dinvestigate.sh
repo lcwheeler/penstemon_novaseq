@@ -42,7 +42,7 @@ dstat_outdir="/work/bs66/dasanthera_novaseq/analysis/Dstats"
 faidxfile="/work/bs66/project_compare_genomes/annot_Pdavidsonii_genome.1mb.fasta.fai"
 treefile="/work/bs66/dasanthera_novaseq/analysis/Dstats/intree_dtrios.tre"
 popset="/work/bs66/dasanthera_novaseq/analysis/Dstats/popset_dtrios.txt"
-test_trios="/work/bs66/dasanthera_novaseq/analysis/Dstats/test_trios.txt"
+test_trios="/work/bs66/dasanthera_novaseq/analysis/Dstats/test_trios_windows.txt"
 
 
 
@@ -66,35 +66,26 @@ chromname="${chromlist[$SLURM_ARRAY_TASK_ID]}"
 
 #Use Dsuite to estimate Dstatistics between all triplet pairs
 #specifying the output prefix, the input vcf, and the popset
-Dsuite Dtrios -o $dstat_outdir/$chromname -t $treefile $invcfdir/$chromname.vcf.gz $popset
+#Dsuite Dtrios -o $dstat_outdir/$chromname -t $treefile $invcfdir/$chromname.vcf.gz $popset
 
 
 #do fbranch test in Dsuite
-#note that this outputs only significant results at default p=0.01
-#plots from the original paper put asterisks in significant blocks, so could
-#change p-thresh to 1, and then put stars in blocks that are significant.
-Dsuite Fbranch $treefile $dstat_outdir/"${chromname}_tree.txt" > $dstat_outdir/"${chromname}_Fbranch.txt"
+#Dsuite Fbranch $treefile $dstat_outdir/"${chromname}_tree.txt" > $dstat_outdir/"${chromname}_Fbranch.txt"
 
 #move files to new directories
-cd $dstat_outdir
-mkdir $chromname.outfiles
-mv "${chromname}"_* $chromname.outfiles
+#cd $dstat_outdir
+#mkdir $chromname.outfiles
+#mv "${chromname}"_* $chromname.outfiles
 
 #plot fbranch test output
-cd $chromname.outfiles
-python $dtools/dtools.py "${chromname}_Fbranch.txt" $treefile
-mv fbranch.png $chromname.fbranch.png
-mv fbranch.svg $chromname.fbranch.svg
+#cd $chromname.outfiles
+#python $dtools/dtools.py "${chromname}_Fbranch.txt" $treefile
+#mv fbranch.png $chromname.fbranch.png
+#mv fbranch.svg $chromname.fbranch.svg
 
 
 
-
-
-
-
-#move files to new directories
-
-#Follow-up analyses for trios with significantly elevated D:
-#calculates D, f_D and f_dM in windows along the genome
-#Dsuite Dinvestigate -w 10000,2500 $invcfdir/$chromname.vcf.gz $test_trios
+#perform investigate analyses -- try large windows first, and on whole genome 
+Dsuite Dinvestigate -w 1000,500 $invcf $popset $test_trios
+#Dsuite Dinvestigate -w 1000,500 $invcfdir/$chromname.vcf.gz $test_trios
 
