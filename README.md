@@ -1,4 +1,4 @@
-# Dasanthera novaseq
+# Penstemon (section Habroanthus) phylogenomics
 
 ## Directory setup
 ### [Quality control](1_QC/)
