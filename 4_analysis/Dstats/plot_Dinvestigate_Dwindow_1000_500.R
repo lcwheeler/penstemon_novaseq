@@ -3,7 +3,7 @@ library(gridExtra)
 setwd("~/Desktop/Dstats/Dwindow_1000_500")
 
 #set Z-score variable to identify outlier windows. Higher value is more conservative
-ZTHRESH = 3
+ZTHRESH = 4
 
 #generate a data frame which will capture significant D statistic windows
 sig_windows <- data.frame()
@@ -83,7 +83,8 @@ for (i in 1:length(scaflist)){
            theme(legend.position = "none"))
 }
 #write the plot
-pdf('davidsonii_x_newberryi_f_dM_window_1000_500.pdf')
+pdf(paste('davidsonii_x_newberryi_f_dM_window_1000_500_z', ZTHRESH, '.pdf',
+          sep = ""))
 for (i in 1:length(scaflist)){
   print(get(paste("p", i, sep = "")))
 }
@@ -165,7 +166,8 @@ for (i in 1:length(scaflist)){
            theme(legend.position = "none"))
 }
 #write the plot
-pdf('newberryi_x_rupicola_SHASTA_f_dM_window_1000_500.pdf')
+pdf(paste('newberryi_x_rupicola_SHASTA_f_dM_window_1000_500_z', ZTHRESH, '.pdf',
+          sep = ""))
 for (i in 1:length(scaflist)){
   print(get(paste("p", i, sep = "")))
 }
@@ -242,7 +244,8 @@ for (i in 1:length(scaflist)){
            theme(legend.position = "none"))
 }
 #write the plot
-pdf('newberryi_x_rupicola_NO-SHASTA_f_dM_window_1000_500.pdf')
+pdf(paste('newberryi_x_rupicola_NO-SHASTA_f_dM_window_1000_500_z', ZTHRESH, '.pdf',
+          sep = ""))
 for (i in 1:length(scaflist)){
   print(get(paste("p", i, sep = "")))
 }
@@ -320,7 +323,8 @@ for (i in 1:length(scaflist)){
            theme(legend.position = "none"))
 }
 #write the plot
-pdf('davidsonii_x_rupicola_CRATERLAKE_f_dM_window_1000_500.pdf')
+pdf(paste('davidsonii_x_rupicola_CRATERLAKE_f_dM_window_1000_500_z', ZTHRESH, '.pdf',
+          sep = ""))
 for (i in 1:length(scaflist)){
   print(get(paste("p", i, sep = "")))
 }
@@ -398,7 +402,8 @@ for (i in 1:length(scaflist)){
            theme(legend.position = "none"))
 }
 #write the plot
-pdf('fruticosus_introgression_f_dM_window_1000_500.pdf')
+pdf(paste('fruticosus_introgression_f_dM_window_1000_500_z', ZTHRESH, '.pdf',
+          sep = ""))
 for (i in 1:length(scaflist)){
   print(get(paste("p", i, sep = "")))
 }
@@ -408,12 +413,12 @@ dev.off()
 
 #write the significant windows spreadsheet
 write.csv(sig_windows,
-          file = paste("significant_windows_500_250_z", ZTHRESH, ".csv", sep = ""),
+          file = paste("significant_windows_1000_500_z", ZTHRESH, ".csv", sep = ""),
           row.names = F)
 
 #write the bedfile which will be used to search for CDS in the windows
 bedfile <- sig_windows[, c(1,2,3,8)]
 write.table(bedfile,
-            file = paste("significant_windows_500_250_z", ZTHRESH, ".bed", sep = ""),
+            file = paste("significant_windows_1000_500_z", ZTHRESH, ".bed", sep = ""),
             row.names = F, col.names = F, quote = F, sep = '\t')
 

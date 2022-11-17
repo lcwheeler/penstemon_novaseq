@@ -83,7 +83,8 @@ for (i in 1:length(scaflist)){
            theme(legend.position = "none"))
 }
 #write the plot
-pdf('davidsonii_x_newberryi_f_dM_window_500_250.pdf')
+pdf(paste('davidsonii_x_newberryi_f_dM_window_500_250_z', ZTHRESH, '.pdf',
+          sep = ""))
 for (i in 1:length(scaflist)){
   print(get(paste("p", i, sep = "")))
 }
@@ -165,7 +166,8 @@ for (i in 1:length(scaflist)){
            theme(legend.position = "none"))
 }
 #write the plot
-pdf('newberryi_x_rupicola_SHASTA_f_dM_window_500_250.pdf')
+pdf(paste('newberryi_x_rupicola_SHASTA_f_dM_window_500_250_z', ZTHRESH, '.pdf',
+          sep = ""))
 for (i in 1:length(scaflist)){
   print(get(paste("p", i, sep = "")))
 }
@@ -242,7 +244,8 @@ for (i in 1:length(scaflist)){
            theme(legend.position = "none"))
 }
 #write the plot
-pdf('newberryi_x_rupicola_NO-SHASTA_f_dM_window_500_250.pdf')
+pdf(paste('newberryi_x_rupicola_NO-SHASTA_f_dM_window_500_250_z', ZTHRESH, '.pdf',
+          sep = ""))
 for (i in 1:length(scaflist)){
   print(get(paste("p", i, sep = "")))
 }
@@ -320,7 +323,8 @@ for (i in 1:length(scaflist)){
            theme(legend.position = "none"))
 }
 #write the plot
-pdf('davidsonii_x_rupicola_CRATERLAKE_f_dM_window_500_250.pdf')
+pdf(paste('davidsonii_x_rupicola_CRATERLAKE_f_dM_window_500_250_z', ZTHRESH, '.pdf',
+          sep = ""))
 for (i in 1:length(scaflist)){
   print(get(paste("p", i, sep = "")))
 }
@@ -398,7 +402,8 @@ for (i in 1:length(scaflist)){
            theme(legend.position = "none"))
 }
 #write the plot
-pdf('fruticosus_introgression_f_dM_window_500_250.pdf')
+pdf(paste('fruticosus_introgression_f_dM_window_500_250_z', ZTHRESH, '.pdf',
+          sep = ""))
 for (i in 1:length(scaflist)){
   print(get(paste("p", i, sep = "")))
 }
