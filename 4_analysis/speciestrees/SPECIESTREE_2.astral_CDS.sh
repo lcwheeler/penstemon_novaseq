@@ -1,25 +1,26 @@
 #!/bin/sh
 
 #SBATCH -N 1
-#SBATCH -n 1
+#SBATCH -n 12
 #SBATCH -p wessinger-48core
-#SBATCH --job-name=astral_tree
-#SBATCH --output=slurm-astral-CDStree_%j.out
+#SBATCH --job-name=astral_run
+#SBATCH --output=astral_run%j.out
 
 
 cd $SLURM_SUBMIT_DIR
 
-#path to ASTRAL
-astral="/work/bs66/software/ASTRAL/Astral/astral.5.7.8.jar"
 
-#path to window trees, catted into combined treefile
-treefile="/work/bs66/dasanthera_novaseq/analysis/treemetrics/combined_CDStrees.tre"
+# Path to astral tree outfile
 
-#path to output file
-outpath="/work/bs66/dasanthera_novaseq/analysis/astral_trees"
+mkdir -p "/work/lw74/habro/consensus_alignments/CDS_fastas/species_trees_habro"
+outdir="/work/lw74/habro/consensus_alignments/CDS_fastas/species_trees_habro"
+outfile="/work/lw74/habro/consensus_alignments/CDS_fastas/species_trees_habro/Habroanthus_astral_out.tre"
 
 
-#run astral. Using single ML estimates of gene trees rather than bootstrap resampling.
-#the branch annotations are for full annotations
-java -jar $astral --input $treefile --branch-annotate 2 --output $outpath/astral_CDS_annotations.tre
+# Path to file with concatenated gene trees for the full CDS
+trefile="/work/lw74/habro/consensus_alignments/CDS_fastas/gene_trees_full_CDS/Habroanthus_concatenated_gene_trees.tree"
 
+
+# Use Astral to generate a species tree using the full CDS gene trees
+ 
+java -jar /work/lw74/software_installs/ASTRAL-5.7.1/Astral/astral.5.7.1.jar -i $trefile -o $outfile 2>$outdir/"habro_astral_out.log"

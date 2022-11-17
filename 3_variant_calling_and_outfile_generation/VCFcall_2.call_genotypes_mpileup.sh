@@ -2,10 +2,10 @@
 
 #SBATCH -N 1
 #SBATCH -n 8
-#SBATCH -p wessinger-48core
+#SBATCH -p defq
 #SBATCH --job-name=variants_bcftools
 
-
+#wessinger-48core
 cd $SLURM_SUBMIT_DIR
 
 
@@ -15,22 +15,23 @@ cd $SLURM_SUBMIT_DIR
 
 ########################
 #source appropriate environments to enable use of conda installs through batch submission
-source /home/bs66/.bashrc
-source /home/bs66/.bash_profile
+source /home/lw74/.bashrc
+source /home/lw74/.bash_profile
 
 #activate conda environment with packages installed
 #needs bcftools (v1.15.1 works)
-conda activate mapping_etc
+#conda activate mapping_etc
 
 
 #hard path to the reference genome and mapped, filtered reads
 #mapped filtered reads should be same directory as output from script: mapping_pipeline_array_s1a-f.sh
-refgenome="/work/bs66/project_compare_genomes/annot_Pdavidsonii_genome.1mb.fasta"
-mapped_filtered_reads="/work/bs66/dasanthera_novaseq/mapped_filtered_bams"
+refgenome="/work/lw74/refGenome/Pbar.2022.LG.fa"
+mapped_filtered_reads="/work/lw74/habro/mapped_filtered_bams"
 
 
 #path to the output directory for vcf files (called variants). Make prior to running
-outdir="/work/bs66/dasanthera_novaseq/VCFs"
+mkdir -p "/work/lw74/habro/VCFs_WithOutgroups"
+outdir="/work/lw74/habro/VCFs_WithOutgroups"
 
 
 #number of cores used for mpileup and call

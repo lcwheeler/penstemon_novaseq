@@ -9,23 +9,22 @@ cd $SLURM_SUBMIT_DIR
 
 
 #source appropriate environments to enable use of conda installs through batch submission
-source /home/bs66/.bashrc
-source /home/bs66/.bash_profile
+source /home/lw74/.bashrc
+source /home/lw74/.bash_profile
 
 #activate conda environment with QC packages installed
-conda activate QC
-
-
-#Change these: location of raw reads and location of the output directory
-#(will need to make output directory)
-rawreads="/work/bs66/dasanthera_novaseq/raw_reads"
-
-fastqc_outdir_rawreads="/work/bs66/dasanthera_novaseq/fastqc_rawreads"
+#conda activate QC
 
 
 ################
 #fastqc+multiqc#
 ################
+
+rawreads="/work/lw74/habro"
+
+fastqc_outdir_rawreads="/work/lw74/habro/fastqc_rawreads"
+rm -r $fastqc_outdir_rawreads
+mkdir $fastqc_outdir_rawreads
 
 #move to directory with reads (raw reads directory)
 cd $rawreads
@@ -34,9 +33,7 @@ cd $rawreads
 files=(*.fastq.gz)
 
 #perform fastqc -- distinction from for loop is this can process -t files simultaneously
-fastqc "${files[@]}" -t 20 -o $fastqc_outdir_rawreads
+fastqc "${files[@]}" -t 19 -o $fastqc_outdir_rawreads
 
 #summarize results with multiqc
 multiqc $fastqc_outdir_rawreads -o $fastqc_outdir_rawreads
-
-

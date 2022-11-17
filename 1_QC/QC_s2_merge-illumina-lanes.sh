@@ -13,7 +13,7 @@ cd $SLURM_SUBMIT_DIR
 #not necessary to submit as batch script
 
 #location of raw reads to be merged
-rawreads="/work/bs66/dasanthera_novaseq/raw_reads"
+rawreads="/work/lw74/habro"
 cd $rawreads
 
 
@@ -31,3 +31,7 @@ cat "$i"_L00*_R1_001.fastq.gz > "$i"_merged_L001_R1_001.fastq.gz
 cat "$i"_L00*_R2_001.fastq.gz > "$i"_merged_L001_R2_001.fastq.gz
 
 done;
+
+
+mkdir -p merged_read_files
+mv *_merged_*.fastq.gz merged_read_files

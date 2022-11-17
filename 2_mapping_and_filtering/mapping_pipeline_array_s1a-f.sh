@@ -6,31 +6,34 @@
 #SBATCH --job-name=mapping_pipeline
 
 #NOTE: this is an arrayed batch script. It requires special syntax to submit job.
-#I have 18 total samples, and because counting starts at 0:
-#submit with sbatch --array [0-17] mapping_pipeline_array_rmdup_mq20_clipreads.sh
+#I have 38 total samples, and because counting starts at 0:
+#submit with sbatch --array [0-37] mapping_pipeline_array_s1a-f.sh
 
 
 cd $SLURM_SUBMIT_DIR
 
 
 #source appropriate environments to enable use of conda installs through batch submission
-source /home/bs66/.bashrc
-source /home/bs66/.bash_profile
+source /home/lw74/.bashrc
+source /home/lw74/.bash_profile
 
 #activate conda environment with packages installed
 #needs samtools v1.15.1 and bamutil v1.0.15 (I also installed bwa but that should be OK from module)
 #version of samtools installed on cluster is old (no markdup and old fixmate options)
 
-conda activate mapping_etc
+#conda activate mapping_etc
 
 
 #hard path to the filtered reads and reference genome
-filtered_reads="/work/bs66/dasanthera_novaseq/filtered_reads"
-refgenome="/work/bs66/project_compare_genomes/annot_Pdavidsonii_genome.1mb.fasta"
+filtered_reads="/work/lw74/habro/filtered_reads"
+refgenome="/work/lw74/refGenome/Pbar.2022.LG.fa"
 
 #path to the out directories for filtered bams and summary stats. Make prior to running
-outdir="/work/bs66/dasanthera_novaseq/mapped_filtered_bams"
-statsdir="/work/bs66/dasanthera_novaseq/sumstats_mapped_filtered_bams"
+mkdir -p /work/lw74/habro/mapped_filtered_bams
+mkdir -p /work/lw74/habro/sumstats_mapped_filtered_bams
+
+outdir="/work/lw74/habro/mapped_filtered_bams"
+statsdir="/work/lw74/habro/sumstats_mapped_filtered_bams"
 numthreads=8 #change this to match number of cores allocated
 
 

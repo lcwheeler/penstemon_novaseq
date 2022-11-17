@@ -2,8 +2,10 @@
 
 #SBATCH -N 1
 #SBATCH -n 8
-#SBATCH -p wessinger-48core
+#SBATCH -p defq
 #SBATCH --job-name=variants_bcftools
+
+#wessinger-48core
 
 ###NOTE: this is set up as a batch array script. SLURM submit array code begins on line 47.
 
@@ -17,27 +19,28 @@ cd $SLURM_SUBMIT_DIR
 
 ########################
 #source appropriate environments to enable use of conda installs through batch submission
-source /home/bs66/.bashrc
-source /home/bs66/.bash_profile
+source /home/lw74/.bashrc
+source /home/lw74/.bash_profile
 
 #activate conda environment with packages installed
 #needs samtools (v1.15.1 works) and bcftools (v1.15.1 works)
-conda activate mapping_etc
+#conda activate mapping_etc
 
 
 #hard path to the reference genome and the samtools faidx index of the genome
 #mapped filtered reads should not have a "/" at the end. This should be the same directory as output from script: mapping_pipeline_array_s1a-f.sh
-refgenome="/work/bs66/project_compare_genomes/annot_Pdavidsonii_genome.1mb.fasta"
-faidxfile="/work/bs66/project_compare_genomes/annot_Pdavidsonii_genome.1mb.fasta.fai"
-mapped_filtered_reads="/work/bs66/dasanthera_novaseq/mapped_filtered_bams"
+refgenome="/work/lw74/refGenome/Pbar.2022.LG.fa"
+faidxfile="/work/lw74/refGenome/Pbar.2022.LG.fa.fai"
+mapped_filtered_reads="/work/lw74/habro/mapped_filtered_bams"
 
 
 #Location of filtered vcf, from script #3 in this pipeline.
-invcf="/work/bs66/dasanthera_novaseq/VCFs/filtered_consensus_ready_no-indels.vcf.gz"
+invcf="/work/lw74/habro/VCFs_WithOutgroups/filtered_consensus_ready_no-indels.vcf.gz"
 
 
 #path to the output directory for consensus sequence alignments. Make prior to running.
-outdir="/work/bs66/dasanthera_novaseq/consensus_alignments/individual_fullgenome_fastas"
+mkdir -p "/work/lw74/habro/consensus_alignments_WithOutgroups/individual_fullgenome_fastas"
+outdir="/work/lw74/habro/consensus_alignments_WithOutgroups/individual_fullgenome_fastas"
 
 
 #number of cores used

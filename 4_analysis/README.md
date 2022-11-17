@@ -36,34 +36,25 @@ This pipeline uses [IQtree](http://www.iqtree.org/) for gene tree inference. Aga
 #### CDS gene trees
 
 ##### Prepare CDS fasta files for gene tree inference
-The fasta files generated for CDS regions are initially sorted by sample. To estimate CDS gene trees, we need a fasta for each CDS, with each sample's sequence included. First we will want to reformat our fasta files, so they are single line fasta rather than interleaved. Use this code on the CDS fastas.
+The fasta files generated for CDS regions are initially sorted by sample. To estimate CDS gene trees, we need a fasta for each CDS, with each sample's sequence included. First we will want to reformat our fasta files, so they are single line fasta rather than interleaved. Use this code on the CDS fastas. The shell script calls a custom python script (rearrange-consensus-seqs.py). 
 ```shell
 
-for i in *.fa;
-do
-    awk '/^>/ { if(NR>1) print "";  printf("%s\n",$0); next; } { printf("%s",$0);}  END {printf("\n");}' < $i > "${i/.fa/.fixed.fa}"
-    rm $i
-done
+bash TREES_0.rearrange_consensus_sequences.LCW.pyscript.sh
 
 ```
 
-Next, we will want to generate the infiles for gene tree inference. To generate these, see [`CDS_TREES.concat_CDS_fastas.py`](genetrees/CDS_TREES.concat_CDS_fastas.py). This python script takes input fasta, output directory, and missing data threshold, and appends to an output fasta for each CDS, naming the output after the scaffold and region the CDS corresponds to. A simple shell for loop can be run with the python script to add all samples to the output. The missing data threshold here filters for individuals, rather than windows (i.e., if a sample has more missing data than desired, that individual is not added to the output fasta, rather than the output fasta not being generated).
+Next, we will want to generate the infiles for gene tree inference. To generate these, see [`CDS_TREES.concat_CDS_fastas.py`](genetrees/CDS_TREES.concat_CDS_fastas.py). This python script takes input fasta, output directory, and missing data threshold, and appends to an output fasta for each CDS, naming the output after the scaffold and region the CDS corresponds to. The bash script calls a custom python script (missing-data-filter-args.py) that allows relatively flexible user input and returns some statistics on missing data. 
 
 ```shell
-for i in individual_CDS_fastas/CDS_*.fa;
-do
-    python3 CDS_TREES.concat_CDS_fastas.py -i $i -o /work/bs66/dasanthera_novaseq/analysis/CDS_genetree_infiles -m 0.5
-done
+bash TREES_0a.filter-missing-data-seqs.sh
 ```
-
-Here I generate aligned fasta for each CDS, excluding individuals with > 50% missing data. The script is fast, and possible to use without batch submission. But for many samples or many CDS regions, it would be wise to write a batch script so as not to overload the head node.
 
 
 ##### Estimate CDS gene trees
 Still using IQtree for gene tree inference here. This used to be done on a scaffold-by-scaffold basis, but because that information has been lost in the header, instead we are just submitting all files for inference. They could be split up into sections to speed this part up.
 * To infer gene trees, see [`CDS_TREES_1.estimate_CDS_genetrees_iqtree.sh`](genetrees/CDS_TREES_1.estimate_CDS_genetrees_iqtree.sh)
 
-
+An alternative is to use [`TREES_0b.run_fasttree-loopversion.sh`], which runs FastTree instead of IQtree for the gene trees. FastTree is faster, although maybe not as accurate. 
 
 
 #### ASTRAL species tree: windowed analysis
@@ -71,7 +62,6 @@ Still using IQtree for gene tree inference here. This used to be done on a scaff
 First, cat trees into one large file. Change to directory with subdirectories, each containing gene trees estimated for each scaffold.
 
 ```shell
-cd /work/bs66/dasanthera_novaseq/analysis/genetree_outfiles
 for i in scaf_*;
 do
     cat $i/*.treefile >> combined_10kbwindowtrees.tre
@@ -98,25 +88,12 @@ I put both of these outputs in a new directory, `treemetrics`. They will be used
 
 #### ASTRAL species tree: CDS analysis
 
-Perform the same commands as described for the windowed analysis; cat trees to a combined tree file and keep a log of the order in which this was done. 
+Cat trees to a combined tree file for input to Astral
 
 ```shell
-cd /work/bs66/dasanthera_novaseq/analysis/CDS_genetree_outfiles
-for i in *.treefile;
-do
-    cat $i >> combined_CDStrees.tre
-done
+cat *.tre > combined_CDStrees.tre
+ls *.tre > genetrees_filelist.txt
 
-for i in *.treefile;
-do
-    echo $i | tr " " "\n" >> tmpout.txt
-done
-
-cat --number tmpout.txt > numbered_CDStreepaths.txt
-rm tmpout.txt
-
-mv combined_CDStrees.tre ../treemetrics
-mv numbered_CDStreepaths.txt ../treemetrics
 ```
 
 Then, estimate the species tree in ASTRAL.
@@ -159,23 +136,3 @@ ete3 compare --src_tree_list $treelist -r $reftree --unrooted --taboutput > $out
 ```
 
 
-### D-statistics and related metrics
-* Using Dsuite to calculate various metrics related to introgression
-* Using an input tree to additionally test for significance of D with respect to tree topology. Tree for input here is the MLE tree for concatenated species tree, rooted with P. montanus. P. lyalli has been removed from the tree, since we only need one outgroup and it complicates things slightly to keep it.
-
-
-First. perform Dsuite dtrios to generate D statistics for all possible triplets. Include tree topology to generate tree.txt files, which are D metrics with triplets arranged as they are in the tree. This is done on a scaffold-by-scaffold basis.
-* See [`DSTATS_1.ARRAY_dsuite_dtrios.sh`](Dstats/DSTATS_1.ARRAY_dsuite_dtrios.sh)
-
-Next, combine Dtrios output for each scaffold into a genome-wide analysis. These first two scripts will also generate plots of significant f-branch results.
-* See [`DSTATS_2.combineDtrios.sh`](Dstats/DSTATS_2.combineDtrios.sh). Will also need [`intree_NOLYALLII_dtrios.tre`](Dstats/intree_NOLYALLII_dtrios.tre) and [`popset_dtrios.txt`](Dstats/popset_dtrios.txt)
-
-Finally, investigate targeted triplets of interest for sliding window introgression metrics. I tested a few different window sizes. As an example:
-* For conducting this analysis, see [`DSTATS_3a.dsuite_Dinvestigate_1000_500.sh.sh`](Dstats/DSTATS_3a.dsuite_Dinvestigate_1000_500.sh). Will also need [`popset_dtrios.txt`](Dstats/popset_dtrios.txt)
-* For plotting output of this analysis, see [`plot_Dinvestigate.R`](Dstats/plot_Dinvestigate.R)
-
-
-
-
-### Gene identities in significant outliers from D-window analyses
-Use the input bedfile from the first three columns of output from the sliding D window script.

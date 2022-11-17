@@ -9,11 +9,11 @@ cd $SLURM_SUBMIT_DIR
 
 
 #source appropriate environments to enable use of conda installs through batch submission
-source /home/bs66/.bashrc
-source /home/bs66/.bash_profile
+source /home/lw74/.bashrc
+source /home/lw74/.bash_profile
 
 #activate conda environment with QC packages installed
-conda activate QC
+#conda activate QC
 
 
 #######
@@ -21,10 +21,11 @@ conda activate QC
 #######
 
 #path to illumina mergedreads
-mergedreads="/work/bs66/dasanthera_novaseq/merged_reads"
+mergedreads="/work/lw74/habro/merged_read_files"
+
 
 #path to fastp outfiles (creates directory, and replaces is already present)
-out_fastp="/work/bs66/dasanthera_novaseq/filtered_reads"
+out_fastp="/work/lw74/habro/filtered_reads"
 rm -r $out_fastp
 mkdir $out_fastp
 
@@ -44,7 +45,7 @@ done
 #fastqc+multiqc#
 ################
 
-out_fastqc="/work/bs66/dasanthera_novaseq/fastqc_filtered"
+out_fastqc="/work/lw74/habro/fastqc_filtered"
 rm -r $out_fastqc
 mkdir $out_fastqc
 

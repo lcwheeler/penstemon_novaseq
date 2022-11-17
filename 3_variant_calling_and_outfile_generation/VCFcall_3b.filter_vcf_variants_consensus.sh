@@ -2,10 +2,10 @@
 
 #SBATCH -N 1
 #SBATCH -n 16
-#SBATCH -p wessinger-48core
+#SBATCH -p defq
 #SBATCH --job-name=filter_variants
 
-
+#wessinger-48core
 cd $SLURM_SUBMIT_DIR
 
 
@@ -15,24 +15,24 @@ cd $SLURM_SUBMIT_DIR
 
 ########################
 #source appropriate environments to enable use of conda installs through batch submission
-source /home/bs66/.bashrc
-source /home/bs66/.bash_profile
+source /home/lw74/.bashrc
+source /home/lw74/.bash_profile
 
 
 #activate conda environment with packages installed
 #need bcftools (v1.15.1 works)
-conda activate mapping_etc
+#conda activate mapping_etc
 
 #load vcftools (v0.1.17 on cluster works)
 module load vcftools
 
 
 #Location of unfiltered vcf, from script #2 in this pipeline.
-invcf="/work/bs66/dasanthera_novaseq/VCFs/unfiltered_vcf.gz"
+invcf="/work/lw74/habro/VCFs_WithOutgroups/unfiltered_vcf.gz"
 
 
 #path to the output directory for vcfs and gvcfs. Should be made already.
-outdir="/work/bs66/dasanthera_novaseq/VCFs"
+outdir="/work/lw74/habro/VCFs_WithOutgroups"
 
 
 #number of cores used converting from gvcf to vcf
@@ -49,7 +49,9 @@ numthreads=16
 
 
 #only variant sites. filters on QUALITY, DEPTH, and MISSIGNESS of reads.
-#note that exact parameter values should be thought out on analysis-by-analysis basis. This script is for filtering with the eventual goal of generating multiple sequence alignments (phylogenomics!). So, some of the population-genomic filters common at the vcf filtering stage are not helpful here (e.g., filtering on minor allele frequency, HWE proportions, etc.).
+#note that exact parameter values should be thought out on analysis-by-analysis basis. This script is for filtering with the eventual goal of generating multiple 
+#sequence alignments (phylogenomics!). So, some of the population-genomic filters common at the vcf filtering stage 
+#are not helpful here (e.g., filtering on minor allele frequency, HWE proportions, etc.).
 
 #VCFTOOLS
 #--min-alleles 2 means there must be at least two alleles (variant)

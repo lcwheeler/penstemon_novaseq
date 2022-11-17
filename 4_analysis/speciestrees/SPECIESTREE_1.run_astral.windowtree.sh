@@ -24,3 +24,4 @@ trefile="/work/lw74/habro/consensus_alignments_WithOutgroups/individual_fullgeno
 # Use Astral to generate a species tree using the full CDS gene trees
  
 java -jar /work/lw74/software_installs/ASTRAL-5.7.1/Astral/astral.5.7.1.jar --branch-annotate 2 -i $trefile -o $outfile 2>$outdir/"habro_astral_windows_WithOutroupgs_out.log"
+
