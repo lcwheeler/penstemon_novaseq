@@ -170,8 +170,12 @@ First. perform Dsuite dtrios to generate D statistics for all possible triplets.
 Next, combine Dtrios output for each scaffold into a genome-wide analysis. These first two scripts will also generate plots of significant f-branch results.
 * See [`DSTATS_2.combineDtrios.sh`](Dstats/DSTATS_2.combineDtrios.sh). Will also need [`intree_NOLYALLII_dtrios.tre`](Dstats/intree_NOLYALLII_dtrios.tre) and [`popset_dtrios.txt`](Dstats/popset_dtrios.txt)
 
-Finally, investigate targeted triplets of interest for sliding window introgression metrics.
-* For conducting this analysis, see [`DSTATS_3.dsuite_Dinvestigate.sh`](Dstats/DSTATS_3.dsuite_Dinvestigate.sh). Will also need [`popset_dtrios.txt`](Dstats/popset_dtrios.txt)
+Finally, investigate targeted triplets of interest for sliding window introgression metrics. I tested a few different window sizes. As an example:
+* For conducting this analysis, see [`DSTATS_3a.dsuite_Dinvestigate_1000_500.sh.sh`](Dstats/DSTATS_3a.dsuite_Dinvestigate_1000_500.sh). Will also need [`popset_dtrios.txt`](Dstats/popset_dtrios.txt)
 * For plotting output of this analysis, see [`plot_Dinvestigate.R`](Dstats/plot_Dinvestigate.R)
 
 
+
+
+### Gene identities in significant outliers from D-window analyses
+Use the input bedfile from the first three columns of output from the sliding D window script.

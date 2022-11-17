@@ -19,6 +19,8 @@ cd $SLURM_SUBMIT_DIR
 #SETUP#
 #######
 
+
+
 #source appropriate environments to enable use of conda installs through batch submission
 source /home/bs66/.bashrc
 source /home/bs66/.bash_profile
@@ -51,6 +53,7 @@ test_trios="/work/bs66/dasanthera_novaseq/analysis/Dstats/test_trios.txt"
 ##########
 
 
+
 #make array for specifying scaffolds -- to pull out appropriate scaffold, given array
 chromlist=$(awk '{print $1}' $faidxfile)
 chromlist=(${chromlist[@]})
@@ -58,10 +61,10 @@ chromname="${chromlist[$SLURM_ARRAY_TASK_ID]}"
 
 
 #use bcftools to make scaffold-specific .vcf file
-#bcftools view $invcf --regions $chromname -o $invcfdir/$chromname.vcf.gz -Oz
+bcftools view $invcf --regions $chromname -o $invcfdir/$chromname.vcf.gz -Oz
 
 #index the vcf
-#tabix $invcfdir/$chromname.vcf.gz
+tabix $invcfdir/$chromname.vcf.gz
 
 
 #Use Dsuite to estimate Dstatistics between all triplet pairs
@@ -86,15 +89,4 @@ python $dtools/dtools.py "${chromname}_Fbranch.txt" $treefile
 mv fbranch.png $chromname.fbranch.png
 mv fbranch.svg $chromname.fbranch.svg
 
-
-
-
-
-
-
-#move files to new directories
-
-#Follow-up analyses for trios with significantly elevated D:
-#calculates D, f_D and f_dM in windows along the genome
-#Dsuite Dinvestigate -w 10000,2500 $invcfdir/$chromname.vcf.gz $test_trios
 
