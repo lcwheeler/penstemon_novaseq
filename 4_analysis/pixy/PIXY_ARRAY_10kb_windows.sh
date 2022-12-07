@@ -3,37 +3,53 @@
 #SBATCH -N 1
 #SBATCH -n 4
 #SBATCH -p wessinger-48core
-#SBATCH --job-name=pixy_10kb
+#SBATCH --job-name=pixy_run
 
-##NOTE: this is an arrayed batch script, requiring special syntax to submit jobs. The array in this case is relevant for the number of scaffolds (chromosomes) on which you would like to run pixy. Changes to the parameter "chromlist" are also necessary.
+# This runs pixy on the filtered all-states VCF file to calculate dXY statistics
+# This is an array script that must be submitted using sbatch --array [0-n], where n = # linkage groups - 1
+# The array setup allows each chromosome alignment to be run independently in parallel
+
+
+# INPUTS: inputs to this script are the filtered full-genome VCF and pixy pop file
 
 
 cd $SLURM_SUBMIT_DIR
 
 
-#source bash profile and activate conda environment with pixy installed
-source /home/bs66/.bashrc
-source /home/bs66/.bash_profile
-conda activate mapping_etc
+#######
+#SETUP#
+#######
+
+# Source appropriate environments to enable use of conda installs through batch submission
+source /home/lw74/.bashrc
+source /home/lw74/.bash_profile
+
+# Activate the pixy conda environment
+conda activate pixy_env
+
+# Input files
+invcf="/work/lw74/habro/VCFs_WithOutgroups/filtered_consensus_ready_no-indels.vcf.gz"
+popfile="/work/lw74/habro/pixy_analyses/popfile_pixy.txt"
 
 
-#paths to (1) the input vcf, (2) the desired out-directory, and (3) the populations file
-invcf="/work/bs66/dasanthera_novaseq/GVCF_VCFs/filtered_consensus_ready.vcf.gz"
-outdir="/work/bs66/dasanthera_novaseq/analysis/pixyout_fullgenome_10kb"
-popfile="/work/bs66/dasanthera_novaseq/analysis/popfile_pixy.txt"
-
-
-#List of scaffolds (chromosomes) to analyze
-#An alternative (used here) is to read in the samtools faidx indexed file and pull scaffold names from there. Otherwise, list should be in the form ("chr1" "chr2" "chrN").
-#When submitting the job, use sbatch --array [0-n], where n is the number of scaffolds -1
-faidxfile="/work/bs66/project_compare_genomes/annot_Pdavidsonii_genome.1mb.fasta.fai"
+# Make array for specifying the linkage groups
+faidxfile="/work/lw74/refGenome/Pbar.2022.LG.fa.fai"
 chromlist=$(awk '{print $1}' $faidxfile)
 chromlist=(${chromlist[@]})
-#chromlist=("chr1" "chr2" "chr3" "chr4")
 chromname="${chromlist[$SLURM_ARRAY_TASK_ID]}"
 
 
-#Run pixy
+# Set the output directory, specificy sub-dir name to match chrom name
+mkdir -p "/work/lw74/habro/pixy_analyses/pixy_outputs"
+outdir="/work/lw74/habro/pixy_analyses/pixy_outputs/$chromname"
+
+
+##########
+#ANALYSIS#
+##########
+
+# Run pixy on the full Habroanthus dataset
+
 pixy --stats pi fst dxy \
  --vcf $invcf \
  --populations $popfile \
@@ -41,5 +57,4 @@ pixy --stats pi fst dxy \
  --window_size 10000 \
  --n_cores 4 \
  --output_folder $outdir \
- --output_prefix scaffold_$chromname
-
+ --output_prefix $chromname
