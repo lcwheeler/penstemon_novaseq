@@ -1,0 +1,15 @@
+putus	labrosus	barbatus
+putus	labrosus	eatonii
+putus	labrosus	cardinalis
+laevis	eatonii	labrosus
+laevis	eatonii	barbatus
+laevis	eatonii	cardinalis
+virgatus	barbatus	labrosus
+virgatus	barbatus	eatonii
+virgatus	barbatus	cardinalis
+putus	labrosus	glaber
+laevis	eatonii	glaber
+virgatus	barbatus	glaber
+putus	labrosus	virgatus
+laevis	eatonii	putus
+virgatus	barbatus	laevis
