@@ -1,0 +1,24 @@
+IQ-TREE multicore version 2.2.0.3 COVID-edition for Linux 64-bit built Aug  2 2022
+Developed by Bui Quang Minh, James Barbetti, Nguyen Lam Tung,
+Olga Chernomor, Heiko Schmidt, Dominik Schrempf, Michael Woodhams, Ly Trong Nhan.
+
+Host:    node338 (AVX512, FMA3, 187 GB RAM)
+Command: iqtree2 -t /work/lw74/habro/species_trees_habro/Habroanthus_windows_WithOutgroups_astral_out.tre --gcf /work/lw74/habro/concordance_conflict_analyses/CDS_analyses/Habroanthus_WithOutgroups_concatenated_gene_trees.tree --prefix CDS_WithOutgroups_concord
+Seed:    182428 (Using SPRNG - Scalable Parallel Random Number Generator)
+Time:    Wed Dec  7 13:07:02 2022
+Kernel:  AVX+FMA - 1 threads (48 CPU cores detected)
+
+HINT: Use -nt option to specify number of threads because your CPU has 48 cores!
+HINT: -nt AUTO will automatically determine the best number of threads to use.
+
+Reading tree /work/lw74/habro/species_trees_habro/Habroanthus_windows_WithOutgroups_astral_out.tre ...
+rooted tree with 45 taxa and 89 branches
+Reading tree(s) file /work/lw74/habro/concordance_conflict_analyses/CDS_analyses/Habroanthus_WithOutgroups_concatenated_gene_trees.tree ...
+23654 tree(s) loaded (0 rooted and 23654 unrooted)
+Computing gene concordance factor...
+3.178 sec
+Tree with concordance factors written to CDS_WithOutgroups_concord.cf.tree
+Annotated tree (best viewed in FigTree) written to CDS_WithOutgroups_concord.cf.tree.nex
+Tree with branch IDs written to CDS_WithOutgroups_concord.cf.branch
+Concordance factors per branch printed to CDS_WithOutgroups_concord.cf.stat
+Date and Time: Wed Dec  7 13:07:08 2022
