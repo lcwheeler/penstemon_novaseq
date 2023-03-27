@@ -6,11 +6,12 @@ import os
 #1. name of input file
 #2. the size of the window wanted
 #3. the prefix to append to the output files
+
 input_file = sys.argv[1]
 windowsize = int(sys.argv[2])
 missingthresh = float(sys.argv[3]) #any window with an individual with this proportion of missing data or higher will be removed
 prefix = sys.argv[4]
-
+split_str = sys.argv[5]
 
 
 #generate info about alignment and number of cycles needed
@@ -44,6 +45,7 @@ for i in range(1,cycles+1):
                     fasta_line = fasta_line.strip()
                     if fasta_line.startswith('>'):
                         name_line = fasta_line
+                        name_line = ">" + name_line.split(split_str)[1]
                     elif len(fasta_line) > 0:
                         seq_line = fasta_line
                         if name_line.startswith('>REF '):#remove reference sequence
@@ -56,4 +58,3 @@ for i in range(1,cycles+1):
                             deletefile = True
         if deletefile == True:
             os.remove(filename)
-
