@@ -8,13 +8,13 @@ import pandas as pd
 import argparse
 
 
-def filter_fastas(fpattern, rm_ext, save_ext, per_n, num_samples, per_m, id_split_string):
+def filter_fastas(fpattern, rm_ext, save_ext, per_n, num_samples, id_split_string):
 
     """This function takes fasta files containing nucleotide sequences as input and 
     filters them based on the percentage of missing data. Sequences that don't pass
     the cutoff test (set as per_n) are removed from the fasta files. Data on the total
     number of removed sequences and the identities of removed sequences from each file
-    are output as CSV files. Lists of files that pass and fail based on a cutoff (per_m)
+    are output as CSV files. Lists of files that pass and fail based on a cutoff (num_samples)
     of individual sequences that pass are also output."""
     
     # Define dictionaries to collect sequence stats
@@ -23,7 +23,6 @@ def filter_fastas(fpattern, rm_ext, save_ext, per_n, num_samples, per_m, id_spli
     ldict = {}
     pcount = {}
     
-    per_m = float(per_m)
     per_n = float(per_n)
     num_samples = float(num_samples) 
 
@@ -104,17 +103,17 @@ def main():
     parser.add_argument("-fpattern", help="File patttern to generate list of fasta input files")
     parser.add_argument("-rm_ext", help="File extension to remove from name")
     parser.add_argument("-save_ext", help="File extension to use for saving cleaned files")
-    parser.add_argument("-num_samples", help="Number of samples/seqs in each rearranged consensus file")    
-    parser.add_argument("-per_m", help="Percentage cutoff for the number of failed sequences per seq file") 
+    parser.add_argument("-num_samples", help="Number of samples/seqs in each rearranged consensus file or number of samples cutoff for failing a file")    
     parser.add_argument("-id_split_string", help="Str in seq ID on which to split out species label")    
     
     args = parser.parse_args()
 
 
-    # Run the function to replace names
-    filter_fastas(args.fpattern, args.rm_ext, args.save_ext, args.per_n, args.num_samples, args.per_m, args.id_split_string)
+    # Run the function to filter the fasta files
+    filter_fastas(args.fpattern, args.rm_ext, args.save_ext, args.per_n, args.num_samples, args.id_split_string)
 
         
 if __name__ == "__main__":
     main()
+
     
